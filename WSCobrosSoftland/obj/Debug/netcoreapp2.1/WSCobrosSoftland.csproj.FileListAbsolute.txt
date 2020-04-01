@@ -1,0 +1,14 @@
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.csprojAssemblyReference.cache
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.csproj.CoreCompileInputs.cache
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.RazorAssemblyInfo.cache
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.RazorAssemblyInfo.cs
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.AssemblyInfoInputs.cache
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.AssemblyInfo.cs
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\bin\Debug\netcoreapp2.1\WSCobrosSoftland.deps.json
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\bin\Debug\netcoreapp2.1\WSCobrosSoftland.runtimeconfig.json
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\bin\Debug\netcoreapp2.1\WSCobrosSoftland.runtimeconfig.dev.json
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\bin\Debug\netcoreapp2.1\WSCobrosSoftland.dll
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\bin\Debug\netcoreapp2.1\WSCobrosSoftland.pdb
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.RazorTargetAssemblyInfo.cache
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.dll
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Debug\netcoreapp2.1\WSCobrosSoftland.pdb
