@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WSCobrosSoftland.Contexts;
-using WSCobrosSoftland.Entities;
 using WSCobrosSoftland.Models;
 using WSCobrosSoftland.Repositories;
 
@@ -22,15 +21,13 @@ namespace WSCobrosSoftland.Controllers
         }
 
         [HttpGet]
-        public async Task<RecuperarDeudasDTO> Get()
+        public async Task<RespRecuperarDeudas> Get(string autentic1, string autentic2, string codEnte, string clave, string valor)
         {
-            var deudas = await Repository.Getall();
+            RespRecuperarDeudas deudas = new RespRecuperarDeudas();
+            
+            deudas = await Repository.Getall(codEnte, clave, valor);
 
-            return new RecuperarDeudasDTO
-            {
-                Estado = 0,
-                ListaDeudas = deudas
-            };
+            return deudas;
         }
     }
 

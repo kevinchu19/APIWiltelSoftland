@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace WSCobrosSoftland.Models
 {
-    public class RecuperarDeudasDTO
+    public class RespRecuperarDeudas
     {
         public int Estado { get; set; }
-        public List<DeudasDTO> ListaDeudas { get; set; }
+        public List<Deudas> Deudas { get; set; }
     }
 }

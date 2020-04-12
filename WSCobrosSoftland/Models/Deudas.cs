@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WSCobrosSoftland.Models
 {
-    public class DeudasDTO
+    public class Deudas
     {
         public string CodDeuda { get; set; }
         public string CodSubEnte { get; set; }

@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using WSCobrosSoftland.Contexts;
-using WSCobrosSoftland.Entities;
 using WSCobrosSoftland.Models;
 
 namespace WSCobrosSoftland.Repositories
@@ -23,37 +22,60 @@ namespace WSCobrosSoftland.Repositories
             Connectionstring = configuration.GetConnectionString("DefaultConnectionString");
         }
 
-        public async Task<List<DeudasDTO>> Getall()
+        public async Task<RespRecuperarDeudas> Getall(string codEnte, string clave, string valor)
         {
-            //return await Context.Vtrmvc.ToListAsync();
-            using (SqlConnection sql = new SqlConnection(Connectionstring))
+            int estado = 0;
+            List<Deudas> response = new List<Deudas>();
+
+            try
             {
-                using (SqlCommand cmd = new SqlCommand("ALM_WS_RecuperarDeudas", sql))
+                using (SqlConnection sql = new SqlConnection(Connectionstring))
                 {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@Nrocta", "0003310000"));
-                    cmd.Parameters.Add(new SqlParameter("@IdentificadorDeuda", ""));
-
-                    var response = new List<DeudasDTO>();
-
-                    await sql.OpenAsync();
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
+                    using (SqlCommand cmd = new SqlCommand("ALM_WS_RecuperarDeudas", sql))
                     {
-                        while (await reader.ReadAsync())
+
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@CodEnte", codEnte));
+                        cmd.Parameters.Add(new SqlParameter("@Clave", clave));
+                        cmd.Parameters.Add(new SqlParameter("@Valor", valor.ToString()));
+
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            response.Add(MapToValue(reader));
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToValue(reader));
+                            }
                         }
                     }
-                    return response;
-
                 }
+
+                if (response.Count == 0)
+                {
+                    estado = 1; //No se han encontrado pendientes para la identificacion ingresada
+                }
+
+
             }
+            catch (Exception mensajeError)
+            {
+                estado = 201;
+            }
+
+            
+            return new RespRecuperarDeudas
+            {
+                Estado = estado,
+                Deudas = response
+            };
+            //return await Context.Vtrmvc.ToListAsync();
+            
         }
 
-        private DeudasDTO MapToValue(SqlDataReader reader)
+        private Deudas MapToValue(SqlDataReader reader)
         {
-            return new DeudasDTO()
+            return new Deudas()
             {
                 CodDeuda = (string)reader["CodDeuda"],
                 CodSubEnte = (string)reader["CodSubEnte"],
