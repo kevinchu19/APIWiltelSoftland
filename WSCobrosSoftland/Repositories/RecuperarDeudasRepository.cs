@@ -22,6 +22,7 @@ namespace WSCobrosSoftland.Repositories
             Connectionstring = configuration.GetConnectionString("DefaultConnectionString");
         }
 
+        
         public async Task<RespRecuperarDeudas> Getall(string codEnte, string clave, string valor)
         {
             int estado = 0;
@@ -86,6 +87,6 @@ namespace WSCobrosSoftland.Repositories
 
             };
         }
-
+        
     }
 }

@@ -28,5 +28,6 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtSysver { get; set; }
         public string SarVtCmpver { get; set; }
         public decimal? SarVtrrcc01Cannac { get; set; }
+        public decimal? SarVtrrcc01Canext { get; set; }
     }
 }

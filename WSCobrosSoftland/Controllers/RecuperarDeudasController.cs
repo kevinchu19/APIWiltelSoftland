@@ -23,6 +23,9 @@ namespace WSCobrosSoftland.Controllers
         [HttpGet]
         public async Task<RespRecuperarDeudas> Get(string autentic1, string autentic2, string codEnte, string clave, string valor)
         {
+
+            //bool Autenticado =  Repository.ValidoAutenticación(autentic1, autentic2);
+
             RespRecuperarDeudas deudas = new RespRecuperarDeudas();
             
             deudas = await Repository.Getall(codEnte, clave, valor);

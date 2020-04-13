@@ -30,5 +30,11 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtSysver { get; set; }
         public string SarVtCmpver { get; set; }
         public string UsrVtrrcc04Codori { get; set; }
+        public string SarVtrrcc04Codbco { get; set; }
+        public int? SarVtrrcc04Chesuc { get; set; }
+        public string SarVtrrcc04Catego { get; set; }
+        public string SarVtrrcc04Docfir { get; set; }
+        public string SarVtrrcc04Tipdoc { get; set; }
+        public string SarVtrrcc04Nrodoc { get; set; }
     }
 }

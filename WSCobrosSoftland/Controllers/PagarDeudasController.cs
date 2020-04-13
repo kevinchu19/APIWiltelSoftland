@@ -20,12 +20,12 @@ namespace WSCobrosSoftland.Controllers
         }
 
         [HttpPost]
-        public async Task<PagarDeudasDTO> Post(string autentic1, string autentic2, 
+        public async Task<RespEstadoTransaccion> Post(string autentic1, string autentic2, 
                                                string CodBoca, string CodTerminal,
                                                string CodDeuda, string CodEnte,
                                                string IdTransaccion, string Importe)
         {
-            PagarDeudasDTO response = new PagarDeudasDTO();
+            RespEstadoTransaccion response = new RespEstadoTransaccion();
 
             response = await Repository.Post(CodBoca, CodTerminal,
                                              CodDeuda, CodEnte,

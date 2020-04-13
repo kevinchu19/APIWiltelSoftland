@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace WSCobrosSoftland.Models
 {
-    public class PagarDeudasDTO
+    public class RespEstadoTransaccion
     {
-        public int Estado { get; set; }
-        public string NroOperacion { get; set; }
+        public int Estado{ get; set; }
+        public string NroOperacion{ get; set; }
     }
 }

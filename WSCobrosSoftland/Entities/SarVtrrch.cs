@@ -9,6 +9,7 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtrrchStatus { get; set; }
         public string SarVtrrchCodcom { get; set; }
         public string SarVtrrchNrocta { get; set; }
+        public DateTime SarVtrrchFchmov{ get; set; }
         public int? SarVtrrchCodori { get; set; }
         public string SarVtrrchCodemp { get; set; }
         public string SarVtrrchModfor { get; set; }
@@ -24,7 +25,7 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtHormov { get; set; }
         public string SarVtModule { get; set; }
         public string SarVtOalias { get; set; }
-        public byte[] SarVtTstamp { get; set; }
+        //public byte[] SarVtTstamp { get; set; }
         public string SarVtLottra { get; set; }
         public string SarVtLotrec { get; set; }
         public string SarVtLotori { get; set; }
