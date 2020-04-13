@@ -13,6 +13,7 @@ namespace WSCobrosSoftland.Controllers
     public class PagarDeudasController : ControllerBase
     {
         private readonly PagarDeudasRepository Repository;
+        public RespEstadoTransaccion response{ get; set; }
 
         public PagarDeudasController(PagarDeudasRepository repository)
         {
@@ -25,8 +26,7 @@ namespace WSCobrosSoftland.Controllers
                                                string CodDeuda, string CodEnte,
                                                string IdTransaccion, string Importe)
         {
-            RespEstadoTransaccion response = new RespEstadoTransaccion();
-
+            
             response = await Repository.Post(CodBoca, CodTerminal,
                                              CodDeuda, CodEnte,
                                              IdTransaccion,Importe);

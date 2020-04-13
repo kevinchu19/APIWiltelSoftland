@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace WSCobrosSoftland.Repositories
 
             if (comprobanteDeuda.Codfor == null)
             {
-                response.Estado = 4;
+                response.Estado = 4; // Codigo de Deuda inexistente
                 response.NroOperacion = "";
 
                 return response;
@@ -42,7 +43,24 @@ namespace WSCobrosSoftland.Repositories
             
             if (comprobanteDeuda.Fchvnc.Date < DateTime.Now.Date)
             {
-                response.Estado = 3;
+                response.Estado = 3; //Deuda vencida
+                response.NroOperacion = "";
+
+                return response;
+            }
+
+            if (comprobanteDeuda.Saldo == 0)
+            {
+                response.Estado = 7; // La deuda ya fue cancelada
+                response.NroOperacion = "";
+
+                return response;
+            }
+
+
+            if (comprobanteDeuda.Saldo < Convert.ToDecimal(Importe))
+            {
+                response.Estado = 10; //El importe no puede ser superior al monto adeudado del comprobante
                 response.NroOperacion = "";
 
                 return response;
@@ -50,7 +68,9 @@ namespace WSCobrosSoftland.Repositories
 
             response =  await InsertoRegistros(CodBoca, CodTerminal,
                                                 comprobanteDeuda, CodEnte,
-                                                (IdTransaccion + Guid.NewGuid()).Substring(1,40), Importe);
+                                                //(IdTransaccion + Guid.NewGuid()).Substring(1,40)
+                                                IdTransaccion
+                                                , Importe);
             
             return response;
 
@@ -124,18 +144,28 @@ namespace WSCobrosSoftland.Repositories
             await Context.SaveChangesAsync();
 
             await InsertaCwJmSchedules("USR_RC");
-
+        
             //Para dejar tiempo a Softland a que procese el recibo
-            Thread.Sleep(6000);
+            Thread.Sleep(10000);
 
-            SarVtrrch ReciboGenerado = await Context.SarVtrrch.FindAsync(idTransaccion);
+            //Para recargar la entidad con los datos del recibo impactado en Softland.
+            await Context.Entry(HeaderCobranza).ReloadAsync();
 
-            string nroOperacion = ReciboGenerado.SarVtrrchCodfor + "|" + ReciboGenerado.SarVtrrchNrofor.ToString();
-
+            string nroOperacion = "";
+            if (HeaderCobranza.SarVtrrchCodfor == null)
+            {
+                nroOperacion = "Pago aceptado, numero de comprobante pendiente de confirmar";
+            }
+            else
+            {
+                nroOperacion = HeaderCobranza.SarVtrrchCodfor + "|" + HeaderCobranza.SarVtrrchNrofor.ToString();
+            }
+           
+           
             return new RespEstadoTransaccion
             {
                 Estado = 0,
-                NroOperacion = "1"
+                NroOperacion = nroOperacion
             };
         }
 
@@ -192,7 +222,13 @@ namespace WSCobrosSoftland.Repositories
         private async Task<ComprobanteDeudaSoftland> RecuperarComprobanteDeuda(string identificadorDeuda)
         {
             string sSql = "SELECT " + 
-                " VTRMVH_CODEMP, VTRMVH_MODFOR, VTRMVH_CODFOR, VTRMVH_NROFOR, VTRMVC_FCHVNC, VTRMVC_IMPNAC, VTRMVH_NROCTA " +
+                " VTRMVH_CODEMP, VTRMVH_MODFOR, VTRMVH_CODFOR, VTRMVH_NROFOR, VTRMVC_FCHVNC, VTRMVC_IMPNAC, VTRMVH_NROCTA, " +
+                " ISNULL((SELECT SUM(VTRMVC_IMPNAC) FROM VTRMVC " +
+                " WHERE " +
+                " VTRMVC_EMPAPL = VTRMVH_CODEMP AND " +
+                " VTRMVC_MODAPL = VTRMVH_MODFOR AND " +
+                " VTRMVC_CODAPL = VTRMVH_CODFOR AND " +
+                " VTRMVC_NROAPL = VTRMVH_NROFOR ),0) SALDO " +
                 " FROM VTRMVH " +
                 " INNER JOIN VTRMVC ON " +
                 " VTRMVC_CODEMP = VTRMVH_CODEMP AND " +
@@ -224,6 +260,7 @@ namespace WSCobrosSoftland.Repositories
                             response.Fchvnc = (DateTime)reader["VTRMVC_FCHVNC"];
                             response.Import = (decimal)reader["VTRMVC_IMPNAC"];
                             response.Nrocta= (string)reader["VTRMVH_NROCTA"];
+                            response.Saldo= (decimal)reader["SALDO"];
 
                         }
                     }

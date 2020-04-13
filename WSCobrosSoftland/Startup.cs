@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using WSCobrosSoftland.Contexts;
+using WSCobrosSoftland.Helpers;
 using WSCobrosSoftland.Repositories;
 
 namespace WSCobrosSoftland
@@ -39,7 +40,10 @@ namespace WSCobrosSoftland
 
             services.AddMvc()
                 .AddXmlDataContractSerializerFormatters();
-            services.AddMvc().
+            services.AddMvc(Options =>
+            {
+                Options.Filters.Add(new FiltrodeExcepcion());
+            }).
                 SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<RecuperarDeudasRepository>();

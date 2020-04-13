@@ -13,6 +13,7 @@ namespace WSCobrosSoftland.Models
         public int Nrofor { get; set; }
         public DateTime Fchvnc { get; set; }
         public decimal Import { get; set; }
+        public decimal Saldo { get; set; }
         public String Nrocta { get; set; }
 
     }
