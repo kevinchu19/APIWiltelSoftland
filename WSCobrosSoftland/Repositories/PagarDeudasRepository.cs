@@ -14,12 +14,15 @@ namespace WSCobrosSoftland.Repositories
 {
     public class PagarDeudasRepository
     {
+        private readonly Serilog.ILogger logger;
+
         public WILTELContext Context { get; set; }
         private string Connectionstring { get; set; }
 
-        public PagarDeudasRepository(WILTELContext context, IConfiguration configuration)
+        public PagarDeudasRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger logger)
         {
             this.Context = context;
+            this.logger = logger;
             Connectionstring = configuration.GetConnectionString("DefaultConnectionString");
         }
 
@@ -37,7 +40,7 @@ namespace WSCobrosSoftland.Repositories
             {
                 response.Estado = 4; // Codigo de Deuda inexistente
                 response.NroOperacion = "";
-
+                logger.Warning($"Codigo de Deuda inexistente, Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
                 return response;
             }
             
@@ -45,7 +48,7 @@ namespace WSCobrosSoftland.Repositories
             {
                 response.Estado = 3; //Deuda vencida
                 response.NroOperacion = "";
-
+                logger.Warning($"Deuda vencida, el día {comprobanteDeuda.Fchvnc.Date} - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
                 return response;
             }
 
@@ -53,7 +56,7 @@ namespace WSCobrosSoftland.Repositories
             {
                 response.Estado = 7; // La deuda ya fue cancelada
                 response.NroOperacion = "";
-
+                logger.Warning($"La deuda ya fue cancelada - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
                 return response;
             }
 
@@ -62,15 +65,14 @@ namespace WSCobrosSoftland.Repositories
             {
                 response.Estado = 10; //El importe no puede ser superior al monto adeudado del comprobante
                 response.NroOperacion = "";
-
+                logger.Warning($"El importe no puede ser superior al monto adeudado del comprobante - " +
+                    $"Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
                 return response;
             }
 
             response =  await InsertoRegistros(CodBoca, CodTerminal,
                                                 comprobanteDeuda, CodEnte,
-                                                //(IdTransaccion + Guid.NewGuid()).Substring(1,40)
-                                                IdTransaccion
-                                                , Importe);
+                                                (IdTransaccion + Guid.NewGuid()).Substring(1,40), Importe);
             
             return response;
 
@@ -131,20 +133,32 @@ namespace WSCobrosSoftland.Repositories
                 SarVtDebaja = "N"
             };
 
-            Context.SarVtrrch.Add(HeaderCobranza);
+            try
+            {
+                Context.SarVtrrch.Add(HeaderCobranza);
 
-            await Context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
 
-            Context.SarVtrrcc01.Add(AplicacionesCobranza);
+                Context.SarVtrrcc01.Add(AplicacionesCobranza);
 
-            await Context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
 
-            Context.SarVtrrcc04.Add(MediosdeCobro);
+                Context.SarVtrrcc04.Add(MediosdeCobro);
 
-            await Context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
+
+                logger.Information("Se insertaron registros en tablas SAR_VTRRCH e hijas");
+            }
+            catch (Exception error)
+            {
+                logger.Fatal($"Error al insertar registros en tablas SAR_VTRRCH e hijas:{error}");
+            };
+            
 
             await InsertaCwJmSchedules("USR_RC");
-        
+
+            logger.Information("Se insertó cwjmschedules");
+            
             //Para dejar tiempo a Softland a que procese el recibo
             Thread.Sleep(10000);
 
@@ -154,13 +168,14 @@ namespace WSCobrosSoftland.Repositories
             string nroOperacion = "";
             if (HeaderCobranza.SarVtrrchCodfor == null)
             {
+                logger.Warning($"El pago se recibio, pero Softland aún no lo proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
                 nroOperacion = "Pago aceptado, numero de comprobante pendiente de confirmar";
             }
             else
             {
                 nroOperacion = HeaderCobranza.SarVtrrchCodfor + "|" + HeaderCobranza.SarVtrrchNrofor.ToString();
+                logger.Information($"El pago se recibio, procesado por Softland: {nroOperacion}");
             }
-           
            
             return new RespEstadoTransaccion
             {
@@ -215,6 +230,10 @@ namespace WSCobrosSoftland.Repositories
                     }
                 }
 
+                if (response == "")
+                {
+                    logger.Warning($"No existe la equivalencia - Codigo origen 1: {codi01} - Codigo origen 2: {codi02}, para el registro {codigo}");
+                }
                 return response;
             }
         }

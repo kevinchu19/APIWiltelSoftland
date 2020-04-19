@@ -13,11 +13,14 @@ namespace WSCobrosSoftland.Controllers
     public class PagarDeudasController : ControllerBase
     {
         private readonly PagarDeudasRepository Repository;
+        private readonly Serilog.ILogger logger;
+
         public RespEstadoTransaccion response{ get; set; }
 
-        public PagarDeudasController(PagarDeudasRepository repository)
+        public PagarDeudasController(PagarDeudasRepository repository, Serilog.ILogger logger)
         {
             this.Repository = repository;
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -26,10 +29,14 @@ namespace WSCobrosSoftland.Controllers
                                                string CodDeuda, string CodEnte,
                                                string IdTransaccion, string Importe)
         {
-            
+
+            this.logger.Information($"Se recibió pago, Boca: {CodBoca}, Terminal {CodTerminal}, " +
+                                    $"Deuda:{CodDeuda}, Ente: {CodEnte}, Importe: {Importe}");
+
             response = await Repository.Post(CodBoca, CodTerminal,
                                              CodDeuda, CodEnte,
                                              IdTransaccion,Importe);
+            logger.Information($"Respuesta:{response.ToString()}");
 
             return response;
         }

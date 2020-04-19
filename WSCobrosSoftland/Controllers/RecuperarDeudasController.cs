@@ -15,22 +15,29 @@ namespace WSCobrosSoftland.Controllers
     public class RecuperarDeudasController : ControllerBase
     {
         private readonly RecuperarDeudasRepository Repository;
-        public RecuperarDeudasController(RecuperarDeudasRepository repository)
+        private readonly Serilog.ILogger logger;
+
+        public RecuperarDeudasController(RecuperarDeudasRepository repository, Serilog.ILogger logger)
         {
             this.Repository = repository;
+            this.logger = logger;
         }
 
         [HttpGet]
         public async Task<RespRecuperarDeudas> Get(string autentic1, string autentic2, string codEnte, string clave, string valor)
         {
 
+            this.logger.Information($"Se recibió consulta de deuda, Ente: {codEnte}, Clave: {clave}, " +
+                              $"Valor:{valor}");
+
             //bool Autenticado =  Repository.ValidoAutenticación(autentic1, autentic2);
 
-            RespRecuperarDeudas deudas = new RespRecuperarDeudas();
+            RespRecuperarDeudas response = new RespRecuperarDeudas();
             
-            deudas = await Repository.Getall(codEnte, clave, valor);
+            response = await Repository.Getall(codEnte, clave, valor);
 
-            return deudas;
+            this.logger.Information($"Respuesta: {response}");
+            return response;
         }
     }
 

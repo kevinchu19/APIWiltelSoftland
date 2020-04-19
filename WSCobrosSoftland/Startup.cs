@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Serilog;
 using WSCobrosSoftland.Contexts;
 using WSCobrosSoftland.Helpers;
 using WSCobrosSoftland.Repositories;
@@ -48,6 +49,15 @@ namespace WSCobrosSoftland
 
             services.AddScoped<RecuperarDeudasRepository>();
             services.AddScoped<PagarDeudasRepository>();
+            services.AddSingleton<Serilog.ILogger>(options =>
+            {
+                var connstring = Configuration["Serilog:SerilogConnectionString"];
+                var tableName = Configuration["Serilog:TableName"];
+                return new LoggerConfiguration().WriteTo.
+                MSSqlServer(connstring, tableName,
+                restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+                autoCreateSqlTable: true).CreateLogger();
+            });
             //services.AddAutoMapper(configuration => 
             //    configuration.CreateMap<>
             //    ,typeof(Startup));
