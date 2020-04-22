@@ -30,9 +30,21 @@ namespace WSCobrosSoftland.Repositories
                                                string CodDeuda, string CodEnte,
                                                string IdTransaccion, string Importe)
         {
-            
-            RespEstadoTransaccion response = new RespEstadoTransaccion();
-            response.Estado = 0;
+
+            RespEstadoTransaccion response = new RespEstadoTransaccion
+            {
+                Estado = 0
+            };
+
+            SarVtrrch vtrrch = await Context.SarVtrrch.FindAsync(IdTransaccion);
+
+            if (vtrrch != null)
+            {
+                response.Estado = 999; //Error interno... la transaccion ya existe
+                response.NroOperacion = "";
+                logger.Warning($"El id transaccion {IdTransaccion} ya fue recibido.");
+                return response;
+            }
 
             ComprobanteDeudaSoftland comprobanteDeuda = await RecuperarComprobanteDeuda(CodDeuda);
 
@@ -41,7 +53,6 @@ namespace WSCobrosSoftland.Repositories
                 response.Estado = 4; // Codigo de Deuda inexistente
                 response.NroOperacion = "";
                 logger.Warning($"Codigo de Deuda inexistente, Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
-                return response;
             }
             
             if (comprobanteDeuda.Fchvnc.Date < DateTime.Now.Date)
@@ -49,7 +60,6 @@ namespace WSCobrosSoftland.Repositories
                 response.Estado = 3; //Deuda vencida
                 response.NroOperacion = "";
                 logger.Warning($"Deuda vencida, el día {comprobanteDeuda.Fchvnc.Date} - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
-                return response;
             }
 
             if (comprobanteDeuda.Saldo == 0)
@@ -57,9 +67,7 @@ namespace WSCobrosSoftland.Repositories
                 response.Estado = 7; // La deuda ya fue cancelada
                 response.NroOperacion = "";
                 logger.Warning($"La deuda ya fue cancelada - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
-                return response;
             }
-
 
             if (comprobanteDeuda.Saldo < Convert.ToDecimal(Importe))
             {
@@ -67,19 +75,28 @@ namespace WSCobrosSoftland.Repositories
                 response.NroOperacion = "";
                 logger.Warning($"El importe no puede ser superior al monto adeudado del comprobante - " +
                     $"Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
-                return response;
             }
 
-            response =  await InsertoRegistros(CodBoca, CodTerminal,
+            if (response.Estado != 999)
+            {
+                SarVtrrch HeaderCobranza = await InsertoRegistros(CodBoca, CodTerminal,
                                                 comprobanteDeuda, CodEnte,
-                                                (IdTransaccion + Guid.NewGuid()).Substring(1,40), Importe);
-            
+                                                IdTransaccion, Importe, response.Estado);
+
+                if (response.Estado == 0)
+                {
+                    response.NroOperacion = await ProcesoRecibo(HeaderCobranza);
+                }
+
+            }
+
+
             return response;
 
         }
 
-        private async Task<RespEstadoTransaccion> InsertoRegistros(string codBoca, string codTerminal, ComprobanteDeudaSoftland comprobanteDeuda, 
-                                                                   string codEnte, string idTransaccion, string importe)
+        private async Task<SarVtrrch> InsertoRegistros(string codBoca, string codTerminal, ComprobanteDeudaSoftland comprobanteDeuda,
+                                                                   string codEnte, string idTransaccion, string importe, int status)
         {
             SarVtrrch HeaderCobranza = new SarVtrrch
             {
@@ -96,6 +113,7 @@ namespace WSCobrosSoftland.Repositories
                 SarVtrrchErrmsg = "",
                 SarVtUltopr = "A",
                 SarVtUserid = "WEBAPI",
+                UsrVtrrchWsestad = status
             };
 
 
@@ -153,12 +171,16 @@ namespace WSCobrosSoftland.Repositories
             {
                 logger.Fatal($"Error al insertar registros en tablas SAR_VTRRCH e hijas:{error}");
             };
-            
 
+            return HeaderCobranza;
+        }
+
+        private async Task<string> ProcesoRecibo(SarVtrrch HeaderCobranza)
+        {
             await InsertaCwJmSchedules("USR_RC");
 
             logger.Information("Se insertó cwjmschedules");
-            
+
             //Para dejar tiempo a Softland a que procese el recibo
             Thread.Sleep(10000);
 
@@ -176,12 +198,8 @@ namespace WSCobrosSoftland.Repositories
                 nroOperacion = HeaderCobranza.SarVtrrchCodfor + "|" + HeaderCobranza.SarVtrrchNrofor.ToString();
                 logger.Information($"El pago se recibio, procesado por Softland: {nroOperacion}");
             }
-           
-            return new RespEstadoTransaccion
-            {
-                Estado = 0,
-                NroOperacion = nroOperacion
-            };
+
+            return nroOperacion;
         }
 
         private async Task InsertaCwJmSchedules(string codjob)

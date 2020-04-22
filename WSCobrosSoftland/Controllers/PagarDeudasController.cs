@@ -15,7 +15,7 @@ namespace WSCobrosSoftland.Controllers
         private readonly PagarDeudasRepository Repository;
         private readonly Serilog.ILogger logger;
 
-        public RespEstadoTransaccion response{ get; set; }
+        public new RespEstadoTransaccion Response{ get; set; }
 
         public PagarDeudasController(PagarDeudasRepository repository, Serilog.ILogger logger)
         {
@@ -33,12 +33,12 @@ namespace WSCobrosSoftland.Controllers
             this.logger.Information($"Se recibió pago, Boca: {CodBoca}, Terminal {CodTerminal}, " +
                                     $"Deuda:{CodDeuda}, Ente: {CodEnte}, Importe: {Importe}");
 
-            response = await Repository.Post(CodBoca, CodTerminal,
+            Response = await Repository.Post(CodBoca, CodTerminal,
                                              CodDeuda, CodEnte,
                                              IdTransaccion,Importe);
-            logger.Information($"Respuesta:{response.ToString()}");
+            logger.Information($"Respuesta:{Response.ToString()}");
 
-            return response;
+            return Response;
         }
     }
 }

@@ -32,5 +32,6 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtSysver { get; set; }
         public string SarVtCmpver { get; set; }
         public string UsrVtrrchArch { get; set; }
+        public int UsrVtrrchWsestad { get; set; }
     }
 }

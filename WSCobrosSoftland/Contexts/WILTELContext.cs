@@ -516,6 +516,7 @@ namespace WSCobrosSoftland.Contexts
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.UsrVtrrchWsestad).HasColumnName("USR_VTRRCH_WSESTAD");
             });
         }
           
