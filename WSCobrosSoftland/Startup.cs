@@ -50,9 +50,16 @@ namespace WSCobrosSoftland
 
             services.AddScoped<WSCobrosAuthenticationRepository>();
             services.AddScoped<WSCobrosAuthenticationService>();
+
             services.AddScoped<RecuperarDeudasRepository>();
+            services.AddScoped<RecuperarDeudasService>();
+
             services.AddScoped<PagarDeudasRepository>();
+            services.AddScoped<PagarDeudasService>();
+
             services.AddScoped<ConsultarEstadoTransaccionRepository>();
+            services.AddScoped<ConsultarEstadoTransaccionService>();
+
             services.AddSingleton<Serilog.ILogger>(options =>
             {
                 var connstring = Configuration["Serilog:SerilogConnectionString"];

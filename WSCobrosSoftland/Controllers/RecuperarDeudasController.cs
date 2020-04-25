@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using WSCobrosSoftland.Contexts;
 using WSCobrosSoftland.Models;
 using WSCobrosSoftland.Repositories;
 using WSCobrosSoftland.Services;
@@ -15,18 +10,17 @@ namespace WSCobrosSoftland.Controllers
     [ApiController]
     public class RecuperarDeudasController : ControllerBase
     {
-        private readonly RecuperarDeudasRepository Repository;
         private readonly Serilog.ILogger logger;
+
+        public RecuperarDeudasService Service { get; }
         public WSCobrosAuthenticationService _AuthenticationService { get; }
 
-        public RecuperarDeudasController(RecuperarDeudasRepository repository, Serilog.ILogger logger, WSCobrosAuthenticationService _AuthenticationService)
+        public RecuperarDeudasController(RecuperarDeudasService service, Serilog.ILogger logger, WSCobrosAuthenticationService _AuthenticationService)
         {
-            this.Repository = repository;
+            Service = service;
             this.logger = logger;
             this._AuthenticationService = _AuthenticationService;
-        }
-
-        
+        }   
 
         [HttpGet]
         public async Task<RespRecuperarDeudas> Get(string autentic1, string autentic2, string codEnte, string clave, string valor)
@@ -41,7 +35,7 @@ namespace WSCobrosSoftland.Controllers
 
             if (Autenticado ==true)
             {
-                response = await Repository.Getall(codEnte, clave, valor);
+                response = await Service.Get(codEnte, clave, valor);
             }
             else
             {

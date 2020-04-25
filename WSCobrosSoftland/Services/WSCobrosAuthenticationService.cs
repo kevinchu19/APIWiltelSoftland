@@ -8,17 +8,18 @@ using WSCobrosSoftland.Repositories;
 
 namespace WSCobrosSoftland.Services
 {
-    public class WSCobrosAuthenticationService
+    public class WSCobrosAuthenticationService: Service
     {
 
-        public WSCobrosAuthenticationRepository Repository { get; }
+        protected new WSCobrosAuthenticationRepository Repository { get; }
+        protected new Serilog.ILogger Logger { get; }
 
-        public WSCobrosAuthenticationService(WSCobrosAuthenticationRepository repository)
+        public WSCobrosAuthenticationService(WSCobrosAuthenticationRepository repository, Serilog.ILogger logger):base(repository, logger)
         {
-            this.Repository = repository;
+            Repository = repository;
+            Logger = logger;
         }
 
-       
         public async Task<bool> ValidoAutenticacion(string autentic1, string autentic2)
         {
             List<UsrWstush> usuarios = new List<UsrWstush>();
