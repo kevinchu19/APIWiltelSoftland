@@ -18,6 +18,7 @@ using Serilog;
 using WSCobrosSoftland.Contexts;
 using WSCobrosSoftland.Helpers;
 using WSCobrosSoftland.Repositories;
+using WSCobrosSoftland.Services;
 
 namespace WSCobrosSoftland
 {
@@ -47,6 +48,8 @@ namespace WSCobrosSoftland
             }).
                 SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddScoped<WSCobrosAuthenticationRepository>();
+            services.AddScoped<WSCobrosAuthenticationService>();
             services.AddScoped<RecuperarDeudasRepository>();
             services.AddScoped<PagarDeudasRepository>();
             services.AddScoped<ConsultarEstadoTransaccionRepository>();

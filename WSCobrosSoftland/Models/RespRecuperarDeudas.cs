@@ -12,7 +12,12 @@ namespace WSCobrosSoftland.Models
 
         public override string ToString()
         {
-            return String.Format($"Estado: {Estado}, Cantidad de comprobantes:{Deudas.Count()}");
+            int count = 0;
+            if (Deudas != null)
+            {
+                count = Deudas.Count();
+            }
+            return String.Format($"Estado: {Estado}, Cantidad de comprobantes:{count}");
         }
     }
 }

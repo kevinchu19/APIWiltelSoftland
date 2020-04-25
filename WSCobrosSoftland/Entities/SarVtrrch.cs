@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WSCobrosSoftland.Contexts
+namespace WSCobrosSoftland.Entities
 {
     public partial class SarVtrrch
     {
@@ -9,14 +9,16 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtrrchStatus { get; set; }
         public string SarVtrrchCodcom { get; set; }
         public string SarVtrrchNrocta { get; set; }
-        public DateTime SarVtrrchFchmov{ get; set; }
-        public int? SarVtrrchCodori { get; set; }
+        public string SarVtrrchCodori { get; set; }
         public string SarVtrrchCodemp { get; set; }
         public string SarVtrrchModfor { get; set; }
         public string SarVtrrchCodfor { get; set; }
         public int? SarVtrrchNrofor { get; set; }
         public string SarVtrrchCobrad { get; set; }
         public string SarVtrrchErrmsg { get; set; }
+        public DateTime? SarVtrrchFchmov { get; set; }
+        public string SarVtrrchEjeaut { get; set; }
+        public string SarVtrrchCodjob { get; set; }
         public DateTime? SarVtFecalt { get; set; }
         public DateTime? SarVtFecmod { get; set; }
         public string SarVtUserid { get; set; }
@@ -32,6 +34,6 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtSysver { get; set; }
         public string SarVtCmpver { get; set; }
         public string UsrVtrrchArch { get; set; }
-        public int UsrVtrrchWsestad { get; set; }
+        public int? UsrVtrrchWsestad { get; set; }
     }
 }

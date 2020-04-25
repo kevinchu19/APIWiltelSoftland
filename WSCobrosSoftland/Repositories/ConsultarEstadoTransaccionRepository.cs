@@ -7,24 +7,17 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using WSCobrosSoftland.Contexts;
+using WSCobrosSoftland.Entities;
 using WSCobrosSoftland.Models;
 
 namespace WSCobrosSoftland.Repositories
 {
-    public class ConsultarEstadoTransaccionRepository
+    public class ConsultarEstadoTransaccionRepository: Repository
     {
-        private readonly Serilog.ILogger logger;
 
-        public WILTELContext Context { get; set; }
-        private string Connectionstring { get; set; }
-
-        public ConsultarEstadoTransaccionRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger logger)
+        public ConsultarEstadoTransaccionRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger logger): base(context, configuration, logger)
         {
-            this.Context = context;
-            this.logger = logger;
-            Connectionstring = configuration.GetConnectionString("DefaultConnectionString");
         }
-
 
         public async Task<RespEstadoTransaccion> Getall(string codBoca, string codTerminal, string idTransaccion)
         {
@@ -38,6 +31,7 @@ namespace WSCobrosSoftland.Repositories
 
             if (vtrrch != null)
             {
+                response.Estado = vtrrch.UsrVtrrchWsestad;
                 if (vtrrch.UsrVtrrchWsestad == 0)
                 {
                     response.NroOperacion = vtrrch.SarVtrrchCodfor + "|" + vtrrch.SarVtrrchNrofor.ToString();

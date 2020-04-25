@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "server=.;user=sa;password=Password1!;database=WILTEL" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -Tables USR_WSTUSH

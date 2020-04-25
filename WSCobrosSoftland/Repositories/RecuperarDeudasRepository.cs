@@ -11,21 +11,14 @@ using WSCobrosSoftland.Models;
 
 namespace WSCobrosSoftland.Repositories
 {
-    public class RecuperarDeudasRepository
+    public class RecuperarDeudasRepository: Repository
     {
-        private readonly Serilog.ILogger logger;
-
-        public WILTELContext Context { get; set; }
-        private string Connectionstring { get; set; }
-
-        public RecuperarDeudasRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger logger)
+        public RecuperarDeudasRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger logger): base(context, configuration, logger)
         {
-            this.Context = context;
-            this.logger = logger;
-            Connectionstring = configuration.GetConnectionString("DefaultConnectionString");
+            
         }
-
         
+
         public async Task<RespRecuperarDeudas> Getall(string codEnte, string clave, string valor)
         {
             int estado = 0;
@@ -58,7 +51,7 @@ namespace WSCobrosSoftland.Repositories
                 if (response.Count == 0)
                 {
                     estado = 1; //No se han encontrado pendientes para la identificacion ingresada
-                    logger.Warning("No se han encontrado pendientes para la identificacion ingresada");
+                    Logger.Warning("No se han encontrado pendientes para la identificacion ingresada");
                 }
 
 
@@ -66,7 +59,7 @@ namespace WSCobrosSoftland.Repositories
             catch (Exception mensajeError)
             {
                 estado = 201;
-                logger.Fatal($"Error al consultar base de datos: {mensajeError}");
+                Logger.Fatal($"Error al consultar base de datos: {mensajeError}");
             }
 
             

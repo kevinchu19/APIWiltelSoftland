@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WSCobrosSoftland.Contexts
+namespace WSCobrosSoftland.Entities
 {
     public partial class SarVtrrcc04
     {
@@ -23,7 +23,7 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtHormov { get; set; }
         public string SarVtModule { get; set; }
         public string SarVtOalias { get; set; }
-        public byte[] SarVtTstamp { get; set; }
+        //public byte[] SarVtTstamp { get; set; }
         public string SarVtLottra { get; set; }
         public string SarVtLotrec { get; set; }
         public string SarVtLotori { get; set; }
@@ -31,7 +31,7 @@ namespace WSCobrosSoftland.Contexts
         public string SarVtCmpver { get; set; }
         public string UsrVtrrcc04Codori { get; set; }
         public string SarVtrrcc04Codbco { get; set; }
-        public int? SarVtrrcc04Chesuc { get; set; }
+        public short? SarVtrrcc04Chesuc { get; set; }
         public string SarVtrrcc04Catego { get; set; }
         public string SarVtrrcc04Docfir { get; set; }
         public string SarVtrrcc04Tipdoc { get; set; }

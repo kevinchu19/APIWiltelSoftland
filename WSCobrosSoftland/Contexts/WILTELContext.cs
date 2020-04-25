@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using WSCobrosSoftland.Entities;
 
 namespace WSCobrosSoftland.Contexts
 {
@@ -21,10 +20,10 @@ namespace WSCobrosSoftland.Contexts
         public virtual DbSet<SarVtrrcc04> SarVtrrcc04 { get; set; }
         public virtual DbSet<SarVtrrcc05> SarVtrrcc05 { get; set; }
         public virtual DbSet<SarVtrrch> SarVtrrch { get; set; }
+        public virtual DbSet<UsrWstush> UsrWstush { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<SarVtrrcc01>(entity =>
             {
                 entity.HasKey(e => new { e.SarVtrrcc01Identi, e.SarVtrrcc01Nroitm });
@@ -91,9 +90,9 @@ namespace WSCobrosSoftland.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SarVtTstamp)
-                    .HasColumnName("SAR_VT_TSTAMP")
-                    .IsRowVersion();
+                //entity.Property(e => e.SarVtTstamp)
+                //    .HasColumnName("SAR_VT_TSTAMP")
+                //    .IsRowVersion();
 
                 entity.Property(e => e.SarVtUltopr)
                     .HasColumnName("SAR_VT_ULTOPR")
@@ -104,6 +103,10 @@ namespace WSCobrosSoftland.Contexts
                     .HasColumnName("SAR_VT_USERID")
                     .HasMaxLength(64)
                     .IsUnicode(false);
+
+                entity.Property(e => e.SarVtrrcc01Canext)
+                    .HasColumnName("SAR_VTRRCC01_CANEXT")
+                    .HasColumnType("numeric(18, 2)");
 
                 entity.Property(e => e.SarVtrrcc01Cannac)
                     .HasColumnName("SAR_VTRRCC01_CANNAC")
@@ -130,10 +133,6 @@ namespace WSCobrosSoftland.Contexts
                     .IsUnicode(false);
 
                 entity.Property(e => e.SarVtrrcc01Nroapl).HasColumnName("SAR_VTRRCC01_NROAPL");
-
-                entity.Property(e => e.SarVtrrcc01Canext)
-                    .HasColumnName("SAR_VTRRCC01_CANEXT");
-
             });
 
             modelBuilder.Entity<SarVtrrcc04>(entity =>
@@ -202,9 +201,9 @@ namespace WSCobrosSoftland.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SarVtTstamp)
-                    .HasColumnName("SAR_VT_TSTAMP")
-                    .IsRowVersion();
+                //entity.Property(e => e.SarVtTstamp)
+                //    .HasColumnName("SAR_VT_TSTAMP")
+                //    .IsRowVersion();
 
                 entity.Property(e => e.SarVtUltopr)
                     .HasColumnName("SAR_VT_ULTOPR")
@@ -216,11 +215,28 @@ namespace WSCobrosSoftland.Contexts
                     .HasMaxLength(64)
                     .IsUnicode(false);
 
+                entity.Property(e => e.SarVtrrcc04Catego)
+                    .HasColumnName("SAR_VTRRCC04_CATEGO")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.SarVtrrcc04Cheque).HasColumnName("SAR_VTRRCC04_CHEQUE");
+
+                entity.Property(e => e.SarVtrrcc04Chesuc).HasColumnName("SAR_VTRRCC04_CHESUC");
+
+                entity.Property(e => e.SarVtrrcc04Codbco)
+                    .HasColumnName("SAR_VTRRCC04_CODBCO")
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.SarVtrrcc04Codcpt)
                     .HasColumnName("SAR_VTRRCC04_CODCPT")
                     .HasMaxLength(6)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SarVtrrcc04Docfir)
+                    .HasColumnName("SAR_VTRRCC04_DOCFIR")
+                    .HasMaxLength(120)
                     .IsUnicode(false);
 
                 entity.Property(e => e.SarVtrrcc04Fchaux)
@@ -240,6 +256,11 @@ namespace WSCobrosSoftland.Contexts
                     .HasMaxLength(2)
                     .IsUnicode(false);
 
+                entity.Property(e => e.SarVtrrcc04Nrodoc)
+                    .HasColumnName("SAR_VTRRCC04_NRODOC")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.SarVtrrcc04Nroint).HasColumnName("SAR_VTRRCC04_NROINT");
 
                 entity.Property(e => e.SarVtrrcc04Tipcpt)
@@ -247,37 +268,14 @@ namespace WSCobrosSoftland.Contexts
                     .HasMaxLength(1)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UsrVtrrcc04Codori)
-                    .HasColumnName("USR_VTRRCC04_CODORI")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SarVtrrcc04Codbco)
-                    .HasColumnName("SAR_VTRRCC04_CODBCO")
-                    .HasMaxLength(6)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SarVtrrcc04Chesuc)
-                    .HasColumnName("SAR_VTRRCC04_CHESUC");
-
-                entity.Property(e => e.SarVtrrcc04Catego)
-                    .HasColumnName("SAR_VTRRCC04_CATEGO")
-                    .HasMaxLength(1)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SarVtrrcc04Docfir)
-                    .HasColumnName("SAR_VTRRCC04_DOCFIR")
-                    .HasMaxLength(120)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.SarVtrrcc04Tipdoc)
                     .HasColumnName("SAR_VTRRCC04_TIPDOC")
                     .HasMaxLength(4)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SarVtrrcc04Nrodoc)
-                    .HasColumnName("SAR_VTRRCC04_NRODOC")
-                    .HasMaxLength(50)
+                entity.Property(e => e.UsrVtrrcc04Codori)
+                    .HasColumnName("USR_VTRRCC04_CODORI")
+                    .HasMaxLength(20)
                     .IsUnicode(false);
             });
 
@@ -347,9 +345,9 @@ namespace WSCobrosSoftland.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SarVtTstamp)
-                    .HasColumnName("SAR_VT_TSTAMP")
-                    .IsRowVersion();
+                //entity.Property(e => e.SarVtTstamp)
+                //    .HasColumnName("SAR_VT_TSTAMP")
+                //    .IsRowVersion();
 
                 entity.Property(e => e.SarVtUltopr)
                     .HasColumnName("SAR_VT_ULTOPR")
@@ -406,10 +404,6 @@ namespace WSCobrosSoftland.Contexts
                     .HasColumnName("SAR_VT_DEBAJA")
                     .HasMaxLength(1)
                     .IsUnicode(false);
-
-                entity.Property(e => e.SarVtrrchFchmov)
-                    .HasColumnName("SAR_VTRRCH_FCHMOV")
-                    .HasColumnType("datetime");
 
                 entity.Property(e => e.SarVtFecalt)
                     .HasColumnName("SAR_VT_FECALT")
@@ -488,11 +482,28 @@ namespace WSCobrosSoftland.Contexts
                     .HasMaxLength(6)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SarVtrrchCodori).HasColumnName("SAR_VTRRCH_CODORI");
+                entity.Property(e => e.SarVtrrchCodjob)
+                    .HasColumnName("SAR_VTRRCH_CODJOB")
+                    .HasMaxLength(60)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SarVtrrchCodori)
+                    .HasColumnName("SAR_VTRRCH_CODORI")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SarVtrrchEjeaut)
+                    .HasColumnName("SAR_VTRRCH_EJEAUT")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.SarVtrrchErrmsg)
                     .HasColumnName("SAR_VTRRCH_ERRMSG")
                     .HasColumnType("text");
+
+                entity.Property(e => e.SarVtrrchFchmov)
+                    .HasColumnName("SAR_VTRRCH_FCHMOV")
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.SarVtrrchModfor)
                     .HasColumnName("SAR_VTRRCH_MODFOR")
@@ -518,7 +529,91 @@ namespace WSCobrosSoftland.Contexts
 
                 entity.Property(e => e.UsrVtrrchWsestad).HasColumnName("USR_VTRRCH_WSESTAD");
             });
+
+            modelBuilder.Entity<UsrWstush>(entity =>
+            {
+                entity.HasKey(e => new {e.UsrWstushUserid });
+
+                entity.ToTable("USR_WSTUSH");
+                
+                entity.Property(e => e.UsrWstushUserid)
+                    .HasColumnName("USR_WSTUSH_USERID")
+                    .HasMaxLength(36)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsCmpver)
+                    .HasColumnName("USR_WS_CMPVER")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsDebaja)
+                    .HasColumnName("USR_WS_DEBAJA")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsFecalt)
+                    .HasColumnName("USR_WS_FECALT")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UsrWsFecmod)
+                    .HasColumnName("USR_WS_FECMOD")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UsrWsHormov)
+                    .HasColumnName("USR_WS_HORMOV")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsLotori)
+                    .HasColumnName("USR_WS_LOTORI")
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsLotrec)
+                    .HasColumnName("USR_WS_LOTREC")
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsLottra)
+                    .HasColumnName("USR_WS_LOTTRA")
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsModule)
+                    .HasColumnName("USR_WS_MODULE")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsOalias)
+                    .HasColumnName("USR_WS_OALIAS")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsSysver)
+                    .HasColumnName("USR_WS_SYSVER")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                //entity.Property(e => e.UsrWsTstamp)
+                //    .HasColumnName("USR_WS_TSTAMP")
+                //    .IsRowVersion();
+
+                entity.Property(e => e.UsrWsUltopr)
+                    .HasColumnName("USR_WS_ULTOPR")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWsUserid)
+                    .HasColumnName("USR_WS_USERID")
+                    .HasMaxLength(64)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrWstushUsrpwd)
+                    .IsRequired()
+                    .HasColumnName("USR_WSTUSH_USRPWD")
+                    .HasMaxLength(60)
+                    .IsUnicode(false);
+            });
         }
-          
     }
 }

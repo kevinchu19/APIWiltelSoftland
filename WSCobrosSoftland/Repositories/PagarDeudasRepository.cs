@@ -8,22 +8,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WSCobrosSoftland.Contexts;
+using WSCobrosSoftland.Entities;
 using WSCobrosSoftland.Models;
 
 namespace WSCobrosSoftland.Repositories
 {
-    public class PagarDeudasRepository
-    {
-        private readonly Serilog.ILogger logger;
-
-        public WILTELContext Context { get; set; }
-        private string Connectionstring { get; set; }
-
-        public PagarDeudasRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger logger)
+    public class PagarDeudasRepository: Repository
+    { 
+        public PagarDeudasRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger Logger):base(context, configuration, Logger)
         {
-            this.Context = context;
-            this.logger = logger;
-            Connectionstring = configuration.GetConnectionString("DefaultConnectionString");
         }
 
         public async Task<RespEstadoTransaccion> Post (string CodBoca, string CodTerminal,
@@ -42,7 +35,7 @@ namespace WSCobrosSoftland.Repositories
             {
                 response.Estado = 999; //Error interno... la transaccion ya existe
                 response.NroOperacion = "";
-                logger.Warning($"El id transaccion {IdTransaccion} ya fue recibido.");
+                Logger.Warning($"El id transaccion {IdTransaccion} ya fue recibido.");
                 return response;
             }
 
@@ -52,28 +45,28 @@ namespace WSCobrosSoftland.Repositories
             {
                 response.Estado = 4; // Codigo de Deuda inexistente
                 response.NroOperacion = "";
-                logger.Warning($"Codigo de Deuda inexistente, Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
+                Logger.Warning($"Codigo de Deuda inexistente, Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
             }
             
             if (comprobanteDeuda.Fchvnc.Date < DateTime.Now.Date)
             {
                 response.Estado = 3; //Deuda vencida
                 response.NroOperacion = "";
-                logger.Warning($"Deuda vencida, el día {comprobanteDeuda.Fchvnc.Date} - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
+                Logger.Warning($"Deuda vencida, el día {comprobanteDeuda.Fchvnc.Date} - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
             }
 
             if (comprobanteDeuda.Saldo == 0)
             {
                 response.Estado = 7; // La deuda ya fue cancelada
                 response.NroOperacion = "";
-                logger.Warning($"La deuda ya fue cancelada - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
+                Logger.Warning($"La deuda ya fue cancelada - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
             }
 
             if (comprobanteDeuda.Saldo < Convert.ToDecimal(Importe))
             {
                 response.Estado = 10; //El importe no puede ser superior al monto adeudado del comprobante
                 response.NroOperacion = "";
-                logger.Warning($"El importe no puede ser superior al monto adeudado del comprobante - " +
+                Logger.Warning($"El importe no puede ser superior al monto adeudado del comprobante - " +
                     $"Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
             }
 
@@ -96,7 +89,7 @@ namespace WSCobrosSoftland.Repositories
         }
 
         private async Task<SarVtrrch> InsertoRegistros(string codBoca, string codTerminal, ComprobanteDeudaSoftland comprobanteDeuda,
-                                                                   string codEnte, string idTransaccion, string importe, int status)
+                                                                   string codEnte, string idTransaccion, string importe, int? status)
         {
             SarVtrrch HeaderCobranza = new SarVtrrch
             {
@@ -165,11 +158,11 @@ namespace WSCobrosSoftland.Repositories
 
                 await Context.SaveChangesAsync();
 
-                logger.Information("Se insertaron registros en tablas SAR_VTRRCH e hijas");
+                Logger.Information("Se insertaron registros en tablas SAR_VTRRCH e hijas");
             }
             catch (Exception error)
             {
-                logger.Fatal($"Error al insertar registros en tablas SAR_VTRRCH e hijas:{error}");
+                Logger.Fatal($"Error al insertar registros en tablas SAR_VTRRCH e hijas:{error}");
             };
 
             return HeaderCobranza;
@@ -179,7 +172,7 @@ namespace WSCobrosSoftland.Repositories
         {
             await InsertaCwJmSchedules("USR_RC");
 
-            logger.Information("Se insertó cwjmschedules");
+            Logger.Information("Se insertó cwjmschedules");
 
             //Para dejar tiempo a Softland a que procese el recibo
             Thread.Sleep(10000);
@@ -190,13 +183,13 @@ namespace WSCobrosSoftland.Repositories
             string nroOperacion = "";
             if (HeaderCobranza.SarVtrrchCodfor == null)
             {
-                logger.Warning($"El pago se recibio, pero Softland aún no lo proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
+                Logger.Warning($"El pago se recibio, pero Softland aún no lo proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
                 nroOperacion = "Pago aceptado, numero de comprobante pendiente de confirmar";
             }
             else
             {
                 nroOperacion = HeaderCobranza.SarVtrrchCodfor + "|" + HeaderCobranza.SarVtrrchNrofor.ToString();
-                logger.Information($"El pago se recibio, procesado por Softland: {nroOperacion}");
+                Logger.Information($"El pago se recibio, procesado por Softland: {nroOperacion}");
             }
 
             return nroOperacion;
@@ -250,7 +243,7 @@ namespace WSCobrosSoftland.Repositories
 
                 if (response == "")
                 {
-                    logger.Warning($"No existe la equivalencia - Codigo origen 1: {codi01} - Codigo origen 2: {codi02}, para el registro {codigo}");
+                    Logger.Warning($"No existe la equivalencia - Codigo origen 1: {codi01} - Codigo origen 2: {codi02}, para el registro {codigo}");
                 }
                 return response;
             }

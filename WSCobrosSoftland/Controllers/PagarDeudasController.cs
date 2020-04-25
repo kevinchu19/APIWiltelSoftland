@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WSCobrosSoftland.Models;
 using WSCobrosSoftland.Repositories;
+using WSCobrosSoftland.Services;
 
 namespace WSCobrosSoftland.Controllers
 {
@@ -14,13 +15,13 @@ namespace WSCobrosSoftland.Controllers
     {
         private readonly PagarDeudasRepository Repository;
         private readonly Serilog.ILogger logger;
+        public WSCobrosAuthenticationService _AuthenticationService { get; }
 
-        public new RespEstadoTransaccion Response{ get; set; }
-
-        public PagarDeudasController(PagarDeudasRepository repository, Serilog.ILogger logger)
+        public PagarDeudasController(PagarDeudasRepository repository, Serilog.ILogger logger, WSCobrosAuthenticationService _AuthenticationService)
         {
             this.Repository = repository;
             this.logger = logger;
+            this._AuthenticationService = _AuthenticationService;
         }
 
         [HttpPost]
@@ -30,15 +31,28 @@ namespace WSCobrosSoftland.Controllers
                                                string IdTransaccion, string Importe)
         {
 
+            RespEstadoTransaccion response = new RespEstadoTransaccion();
+
             this.logger.Information($"Se recibió pago, Boca: {CodBoca}, Terminal {CodTerminal}, " +
                                     $"Deuda:{CodDeuda}, Ente: {CodEnte}, Importe: {Importe}");
 
-            Response = await Repository.Post(CodBoca, CodTerminal,
-                                             CodDeuda, CodEnte,
-                                             IdTransaccion,Importe);
+
+            bool Autenticado = await _AuthenticationService.ValidoAutenticacion(autentic1, autentic2);
+
+            if (Autenticado == true)
+            {
+                response = await Repository.Post(CodBoca, CodTerminal,
+                                                 CodDeuda, CodEnte,
+                                                 IdTransaccion, Importe);
+            }
+            else
+            {
+                response.Estado = 200; //Datos de autenticación incorrectos
+            }
+
             logger.Information($"Respuesta:{Response.ToString()}");
 
-            return Response;
+            return response;
         }
     }
 }
