@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WSCobrosSoftland.Models;
 using WSCobrosSoftland.Repositories;
@@ -8,36 +11,35 @@ namespace WSCobrosSoftland.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ConsultarEstadoTransaccionController : ControllerBase
+    public class AnularPagoController: ControllerBase
     {
-        private readonly ConsultarEstadoTransaccionRepository Repository;
+        
         private readonly Serilog.ILogger logger;
+        public AnularPagoService Service { get; }
         public WSCobrosAuthenticationService _AuthenticationService { get; }
 
-        public ConsultarEstadoTransaccionController(ConsultarEstadoTransaccionRepository repository, Serilog.ILogger logger, WSCobrosAuthenticationService _authenticationService)
+        public AnularPagoController(AnularPagoService service, Serilog.ILogger logger, WSCobrosAuthenticationService _authenticationService)
         {
-            this.Repository = repository;
+            Service = service;
             this.logger = logger;
             this._AuthenticationService = _authenticationService;
         }
 
-        
-
-        [HttpGet]
-        public async Task<RespEstadoTransaccion> Get(string autentic1, string autentic2, string CodBoca, string CodTerminal, string IdTransaccion)
+        [HttpPost]
+        public async Task<RespAnular> Post(string autentic1, string autentic2, string CodBoca, string CodTerminal, string IdTransaccion)
         {
 
-            RespEstadoTransaccion response = new RespEstadoTransaccion();
+            RespAnular response = new RespAnular();
 
-            this.logger.Information($"Se recibió consulta de transaccion, Boca: {CodBoca}, Terminal: {CodTerminal}, " +
-                              $"Id Transaccion:{IdTransaccion}");
+            this.logger.Information($"Se recibió anulacion de pago, Boca: {CodBoca}, Terminal: {CodTerminal}, " +
+                              $"Id Transaccion Pago a anular:{IdTransaccion}");
 
-            
+
             bool Autenticado = await _AuthenticationService.ValidoAutenticacion(autentic1, autentic2);
 
             if (Autenticado == true)
             {
-                response = await Repository.Get(CodBoca, CodTerminal, IdTransaccion);
+                response = await Service.Post(CodBoca, CodTerminal, IdTransaccion);
             }
             else
             {
@@ -48,6 +50,4 @@ namespace WSCobrosSoftland.Controllers
             return response;
         }
     }
-
 }
-

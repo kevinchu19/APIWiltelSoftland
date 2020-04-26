@@ -13,7 +13,7 @@ namespace WSCobrosSoftland.Repositories
         {
         }
 
-        public async Task<RespEstadoTransaccion> Getall(string codBoca, string codTerminal, string idTransaccion)
+        public async Task<RespEstadoTransaccion> Get(string codBoca, string codTerminal, string idTransaccion)
         {
             RespEstadoTransaccion response = new RespEstadoTransaccion
             {
@@ -28,7 +28,23 @@ namespace WSCobrosSoftland.Repositories
                 response.Estado = vtrrch.UsrVtrrchWsestad;
                 if (vtrrch.UsrVtrrchWsestad == 0)
                 {
-                    response.NroOperacion = vtrrch.SarVtrrchCodfor + "|" + vtrrch.SarVtrrchNrofor.ToString();
+                    switch (vtrrch.SarVtrrchStatus)
+                    {
+                        case "S":
+                            response.NroOperacion = vtrrch.SarVtrrchCodfor + "|" + vtrrch.SarVtrrchNrofor.ToString();
+                            response.Estado = 0;
+                            break;
+                        case "E":
+                            response.NroOperacion = "";
+                            response.Estado = 999;
+                            break;
+                        case "N":
+                            response.NroOperacion = "Pago recibido, numero de comprobante pendiente de confirmar";
+                            response.Estado = 0;
+                            break;
+                    }
+
+                   
                 }
             }
             else

@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace WSCobrosSoftland.Models
 {
-    public class RespEstadoTransaccion
+    public class RespPagarDeudas
     {
-        public int Estado{ get; set; }
-        public string NroOperacion{ get; set; }
+        public int Estado { get; set; }
+        public string NroOperacion { get; set; }
 
         public override string ToString()
         {

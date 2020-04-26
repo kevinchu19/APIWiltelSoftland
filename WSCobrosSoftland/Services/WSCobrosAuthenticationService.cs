@@ -36,7 +36,8 @@ namespace WSCobrosSoftland.Services
                     }
                 }
             }
-            
+
+            Logger.Warning($"Autenticación fallida - Usuario:{autentic1}, Password: {autentic2}");
             return false;
         }
     }

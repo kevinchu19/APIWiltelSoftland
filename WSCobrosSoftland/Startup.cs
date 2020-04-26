@@ -36,6 +36,11 @@ namespace WSCobrosSoftland
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(config =>
+            {
+                config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo{ Title = "WSCobros", Version = "v1" });
+            });
+
             services.AddCors();
             services.AddDbContext<WILTELContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
@@ -58,7 +63,9 @@ namespace WSCobrosSoftland
             services.AddScoped<PagarDeudasService>();
 
             services.AddScoped<ConsultarEstadoTransaccionRepository>();
-            services.AddScoped<ConsultarEstadoTransaccionService>();
+
+            services.AddScoped<AnularPagoRepository>();
+            services.AddScoped<AnularPagoService>();
 
             services.AddSingleton<Serilog.ILogger>(options =>
             {
@@ -77,6 +84,13 @@ namespace WSCobrosSoftland
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseSwagger();
+
+            app.UseSwaggerUI(config =>
+            {
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "WSCobros");
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

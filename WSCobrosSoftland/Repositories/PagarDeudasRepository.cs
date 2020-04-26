@@ -16,78 +16,27 @@ namespace WSCobrosSoftland.Repositories
         {
         }
 
-        public async Task<RespEstadoTransaccion> Post (string CodBoca, string CodTerminal,
-                                               string CodDeuda, string CodEnte,
-                                               string IdTransaccion, string Importe)
+
+        public async Task<bool> ExisteTransaccion(string IdTransaccion)
         {
-
-            RespEstadoTransaccion response = new RespEstadoTransaccion
-            {
-                Estado = 0
-            };
-
             SarVtrrch vtrrch = await Context.SarVtrrch.FindAsync(IdTransaccion);
 
             if (vtrrch != null)
             {
-                response.Estado = 999; //Error interno... la transaccion ya existe
-                response.NroOperacion = "";
-                Logger.Warning($"El id transaccion {IdTransaccion} ya fue recibido.");
-                return response;
+                return true;
             }
-
-            ComprobanteDeudaSoftland comprobanteDeuda = await RecuperarComprobanteDeuda(CodDeuda);
-
-            if (comprobanteDeuda.Codfor == null)
+            else
             {
-                response.Estado = 4; // Codigo de Deuda inexistente
-                response.NroOperacion = "";
-                Logger.Warning($"Codigo de Deuda inexistente, Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
+                return false;
             }
-            
-            if (comprobanteDeuda.Fchvnc.Date < DateTime.Now.Date)
-            {
-                response.Estado = 3; //Deuda vencida
-                response.NroOperacion = "";
-                Logger.Warning($"Deuda vencida, el día {comprobanteDeuda.Fchvnc.Date} - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
-            }
-
-            if (comprobanteDeuda.Saldo == 0)
-            {
-                response.Estado = 7; // La deuda ya fue cancelada
-                response.NroOperacion = "";
-                Logger.Warning($"La deuda ya fue cancelada - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
-            }
-
-            if (comprobanteDeuda.Saldo < Convert.ToDecimal(Importe))
-            {
-                response.Estado = 10; //El importe no puede ser superior al monto adeudado del comprobante
-                response.NroOperacion = "";
-                Logger.Warning($"El importe no puede ser superior al monto adeudado del comprobante - " +
-                    $"Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
-            }
-
-            if (response.Estado != 999)
-            {
-                SarVtrrch HeaderCobranza = await InsertoRegistros(CodBoca, CodTerminal,
-                                                comprobanteDeuda, CodEnte,
-                                                IdTransaccion, Importe, response.Estado);
-
-                if (response.Estado == 0)
-                {
-                    response.NroOperacion = await ProcesoRecibo(HeaderCobranza);
-                }
-
-            }
-
-
-            return response;
-
         }
 
-        private async Task<SarVtrrch> InsertoRegistros(string codBoca, string codTerminal, ComprobanteDeudaSoftland comprobanteDeuda,
-                                                                   string codEnte, string idTransaccion, string importe, int? status)
+        
+        public async Task<RespPagarDeudas> Post(string codBoca, string codTerminal, ComprobanteDeudaSoftland comprobanteDeuda,
+                                                                   string codEnte, string idTransaccion, string importe, int status)
         {
+            RespPagarDeudas response = new RespPagarDeudas();
+
             SarVtrrch HeaderCobranza = new SarVtrrch
             {
                 SarVtrrchIdenti = idTransaccion,
@@ -160,16 +109,23 @@ namespace WSCobrosSoftland.Repositories
             catch (Exception error)
             {
                 Logger.Fatal($"Error al insertar registros en tablas SAR_VTRRCH e hijas:{error}");
+                response.Estado = 999;
+                response.NroOperacion = "";
             };
 
-            return HeaderCobranza;
+            if (status == 0)
+            {
+                response = await ProcesoRecibo(HeaderCobranza);
+            }
+            return response;
+          
         }
 
-        private async Task<string> ProcesoRecibo(SarVtrrch HeaderCobranza)
+        private async Task<RespPagarDeudas> ProcesoRecibo(SarVtrrch HeaderCobranza)
         {
-            await InsertaCwJmSchedules("USR_RC");
+            RespPagarDeudas resultado = new RespPagarDeudas();
 
-            Logger.Information("Se insertó cwjmschedules");
+            await InsertaCwJmSchedules("USR_RC");
 
             //Para dejar tiempo a Softland a que procese el recibo
             Thread.Sleep(10000);
@@ -177,125 +133,27 @@ namespace WSCobrosSoftland.Repositories
             //Para recargar la entidad con los datos del recibo impactado en Softland.
             await Context.Entry(HeaderCobranza).ReloadAsync();
 
-            string nroOperacion = "";
-            if (HeaderCobranza.SarVtrrchCodfor == null)
+            switch (HeaderCobranza.SarVtrrchStatus)
             {
-                Logger.Warning($"El pago se recibio, pero Softland aún no lo proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
-                nroOperacion = "Pago aceptado, numero de comprobante pendiente de confirmar";
+                case "S":
+                    Logger.Information($"El pago se recibio, procesado por Softland: {resultado.NroOperacion}");
+                    resultado.Estado = 0;
+                    resultado.NroOperacion = HeaderCobranza.SarVtrrchCodfor + "|" + HeaderCobranza.SarVtrrchNrofor.ToString();
+                    break;
+                case "N":
+                    Logger.Warning($"El pago se recibio, pero Softland aún no lo proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
+                    resultado.Estado = 0;
+                    resultado.NroOperacion  = "Pago recibido, numero de comprobante pendiente de confirmar";
+                    break;
+                case "E":
+                    Logger.Warning($"El pago se recibio, la registracion dio error: {HeaderCobranza.SarVtrrchErrmsg}");
+                    resultado.Estado = 999;
+                    resultado.NroOperacion = "Error interno en aplicación";
+                    break;
             }
-            else
-            {
-                nroOperacion = HeaderCobranza.SarVtrrchCodfor + "|" + HeaderCobranza.SarVtrrchNrofor.ToString();
-                Logger.Information($"El pago se recibio, procesado por Softland: {nroOperacion}");
-            }
-
-            return nroOperacion;
+            
+            return resultado;
         }
 
-        private async Task InsertaCwJmSchedules(string codjob)
-        {
-            using (SqlConnection sql = new SqlConnection(Connectionstring))
-            {
-                using (SqlCommand cmd = new SqlCommand("ALM_InsCwJmSchedules", sql))
-                {
-
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@CODJOB", codjob));
-
-                    await sql.OpenAsync();
-                    await cmd.ExecuteNonQueryAsync();
-                    
-                }
-            }
-        }
-
-        private async Task<string> RecuperarEquivalencia(string codigo, string codi01, string codi02)
-        {
-            string sSql = "SELECT " +
-                " INTEQE_CODEQU " +
-                " FROM INTEQE " +
-                " WHERE " +
-                $" INTEQE_CODIGO = '{codigo}' AND " + 
-                $" INTEQE_CODI01 = '{codi01}' AND " +
-                $" INTEQE_CODI02 = '{codi02}' ";
-
-            string response = "";
-
-            using (SqlConnection sql = new SqlConnection(Connectionstring))
-            {
-                using (SqlCommand cmd = new SqlCommand(sSql, sql))
-                {
-                    cmd.CommandType = System.Data.CommandType.Text;
-
-                    await sql.OpenAsync();
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            response = (string)reader["INTEQE_CODEQU"];
-                        }
-                    }
-                }
-
-                if (response == "")
-                {
-                    Logger.Warning($"No existe la equivalencia - Codigo origen 1: {codi01} - Codigo origen 2: {codi02}, para el registro {codigo}");
-                }
-                return response;
-            }
-        }
-
-        private async Task<ComprobanteDeudaSoftland> RecuperarComprobanteDeuda(string identificadorDeuda)
-        {
-            string sSql = "SELECT " + 
-                " VTRMVH_CODEMP, VTRMVH_MODFOR, VTRMVH_CODFOR, VTRMVH_NROFOR, VTRMVC_FCHVNC, VTRMVC_IMPNAC, VTRMVH_NROCTA, " +
-                " ISNULL((SELECT SUM(VTRMVC_IMPNAC) FROM VTRMVC " +
-                " WHERE " +
-                " VTRMVC_EMPAPL = VTRMVH_CODEMP AND " +
-                " VTRMVC_MODAPL = VTRMVH_MODFOR AND " +
-                " VTRMVC_CODAPL = VTRMVH_CODFOR AND " +
-                " VTRMVC_NROAPL = VTRMVH_NROFOR ),0) SALDO " +
-                " FROM VTRMVH " +
-                " INNER JOIN VTRMVC ON " +
-                " VTRMVC_CODEMP = VTRMVH_CODEMP AND " +
-                " VTRMVC_MODFOR = VTRMVH_MODFOR AND " +
-                " VTRMVC_CODFOR = VTRMVH_CODFOR AND " +
-                " VTRMVC_NROFOR = VTRMVH_NROFOR AND " +
-                " VTRMVC_CODFOR = VTRMVC_CODAPL " +
-                " WHERE " +
-                $" USR_VTRMVH_IDC = '{identificadorDeuda}' ";
-
-            ComprobanteDeudaSoftland response = new ComprobanteDeudaSoftland();
-
-            using (SqlConnection sql = new SqlConnection(Connectionstring))
-            {
-                using (SqlCommand cmd = new SqlCommand(sSql, sql))
-                {
-                    cmd.CommandType = System.Data.CommandType.Text;
-
-                    await sql.OpenAsync();
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            response.Codemp = (string)reader["VTRMVH_CODEMP"];
-                            response.Modfor = (string)reader["VTRMVH_MODFOR"];
-                            response.Codfor = (string)reader["VTRMVH_CODFOR"];
-                            response.Nrofor = (int)reader["VTRMVH_NROFOR"];
-                            response.Fchvnc = (DateTime)reader["VTRMVC_FCHVNC"];
-                            response.Import = (decimal)reader["VTRMVC_IMPNAC"];
-                            response.Nrocta= (string)reader["VTRMVH_NROCTA"];
-                            response.Saldo= (decimal)reader["SALDO"];
-
-                        }
-                    }
-                }
-
-                return response;
-            }
-
-        }
     }
 }
