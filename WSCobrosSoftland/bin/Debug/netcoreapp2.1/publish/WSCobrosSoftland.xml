@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WSCobrosSoftland</name>
+    </assembly>
+    <members>
+        <member name="M:WSCobrosSoftland.Controllers.AnularPagoController.Post(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Permite generar la anulación de una transacción previamente enviada
+            </summary>
+            <param name="autentic1">Usuario</param>
+            <param name="autentic2">Contraseña</param>
+            <param name="CodBoca">Codigo de boca</param>
+            <param name="CodTerminal">Codigo de Terminal</param>
+            <param name="IdTransaccion">Identificador unívoco de transaccion</param>
+            <returns></returns>
+        </member>
+        <member name="M:WSCobrosSoftland.Controllers.ConsultarEstadoTransaccionController.Get(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Permite consultar el estado de una transaccion previamente enviada
+            </summary>
+            <param name="autentic1">Usuario</param>
+            <param name="autentic2">Contraseña</param>
+            <param name="CodBoca">Codigo de boca</param>
+            <param name="CodTerminal">Codigo de Terminal</param>
+            <param name="IdTransaccion">Identificador unívoco de transaccion</param>
+            <returns></returns>
+        </member>
+        <member name="M:WSCobrosSoftland.Controllers.PagarDeudasController.Post(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Genera un recibo en el sistema ERP
+            </summary>
+            <param name="autentic1">Usuario</param>
+            <param name="autentic2">Contraseña</param>
+            <param name="CodBoca">Codigo de boca</param>
+            <param name="CodTerminal">Codigo de Terminal</param>
+            <param name="CodDeuda">Identificador de comprobante cancelado por el pago</param>
+            <param name="CodEnte">Codigo de ente</param>
+            <param name="IdTransaccion">Identificador unívoco de transaccion</param>
+            <param name="Importe">Importe pagado</param>
+            <returns></returns>
+        </member>
+        <member name="M:WSCobrosSoftland.Controllers.RecuperarDeudasController.Get(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Devuelve deudas pendientes de pago de acuerdo a los parametros ingresados
+            </summary>
+            <param name="autentic1"> Usuario </param>
+            <param name="autentic2"> Contraseña </param>
+            <param name="codEnte"> Codigo de entidad </param>
+            <param name="clave"> Valor fijo: nrodoc </param>
+            <param name="valor"> Numero de documento sobre el cual se desean consultar deudas</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

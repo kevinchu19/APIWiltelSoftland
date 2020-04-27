@@ -21,6 +21,19 @@ namespace WSCobrosSoftland.Controllers
             this._AuthenticationService = _AuthenticationService;
         }
 
+
+        /// <summary>
+        /// Genera un recibo en el sistema ERP
+        /// </summary>
+        /// <param name="autentic1">Usuario</param>
+        /// <param name="autentic2">Contraseña</param>
+        /// <param name="CodBoca">Codigo de boca</param>
+        /// <param name="CodTerminal">Codigo de Terminal</param>
+        /// <param name="CodDeuda">Identificador de comprobante cancelado por el pago</param>
+        /// <param name="CodEnte">Codigo de ente</param>
+        /// <param name="IdTransaccion">Identificador unívoco de transaccion</param>
+        /// <param name="Importe">Importe pagado</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<RespPagarDeudas> Post(string autentic1, string autentic2, 
                                                string CodBoca, string CodTerminal,

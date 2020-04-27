@@ -12,3 +12,5 @@ C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Release\netcoreap
 C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Release\netcoreapp2.1\WSCobrosSoftland.RazorTargetAssemblyInfo.cache
 C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Release\netcoreapp2.1\WSCobrosSoftland.dll
 C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Release\netcoreapp2.1\WSCobrosSoftland.pdb
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\bin\Release\netcoreapp2.1\WSCobrosSoftland.xml
+C:\Users\kt\source\repos\WSCobrosSoftland\WSCobrosSoftland\obj\Release\netcoreapp2.1\WSCobrosSoftland.xml

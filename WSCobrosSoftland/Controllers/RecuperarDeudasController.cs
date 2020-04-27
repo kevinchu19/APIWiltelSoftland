@@ -20,8 +20,18 @@ namespace WSCobrosSoftland.Controllers
             Service = service;
             this.logger = logger;
             this._AuthenticationService = _AuthenticationService;
-        }   
+        }
 
+
+        /// <summary>
+        /// Devuelve deudas pendientes de pago de acuerdo a los parametros ingresados
+        /// </summary>
+        /// <param name="autentic1"> Usuario </param>
+        /// <param name="autentic2"> Contraseña </param>
+        /// <param name="codEnte"> Codigo de entidad </param>
+        /// <param name="clave"> Valor fijo: nrodoc </param>
+        /// <param name="valor"> Numero de documento sobre el cual se desean consultar deudas</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<RespRecuperarDeudas> Get(string autentic1, string autentic2, string codEnte, string clave, string valor)
         {

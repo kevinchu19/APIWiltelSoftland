@@ -21,8 +21,16 @@ namespace WSCobrosSoftland.Controllers
             this._AuthenticationService = _authenticationService;
         }
 
-        
 
+        /// <summary>
+        /// Permite consultar el estado de una transaccion previamente enviada
+        /// </summary>
+        /// <param name="autentic1">Usuario</param>
+        /// <param name="autentic2">Contraseña</param>
+        /// <param name="CodBoca">Codigo de boca</param>
+        /// <param name="CodTerminal">Codigo de Terminal</param>
+        /// <param name="IdTransaccion">Identificador unívoco de transaccion</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<RespEstadoTransaccion> Get(string autentic1, string autentic2, string CodBoca, string CodTerminal, string IdTransaccion)
         {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -39,8 +41,17 @@ namespace WSCobrosSoftland
             services.AddSwaggerGen(config =>
             {
                 config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo{ Title = "WSCobros", Version = "v1" });
-            });
+                var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
+                config.IncludeXmlComments(xmlpath);
+            }
 
+
+            
+            
+            );
+
+            
             services.AddCors();
             services.AddDbContext<WILTELContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));

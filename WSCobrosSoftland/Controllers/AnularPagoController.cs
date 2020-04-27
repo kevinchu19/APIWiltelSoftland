@@ -25,6 +25,15 @@ namespace WSCobrosSoftland.Controllers
             this._AuthenticationService = _authenticationService;
         }
 
+        /// <summary>
+        /// Permite generar la anulación de una transacción previamente enviada
+        /// </summary>
+        /// <param name="autentic1">Usuario</param>
+        /// <param name="autentic2">Contraseña</param>
+        /// <param name="CodBoca">Codigo de boca</param>
+        /// <param name="CodTerminal">Codigo de Terminal</param>
+        /// <param name="IdTransaccion">Identificador unívoco de transaccion</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<RespAnular> Post(string autentic1, string autentic2, string CodBoca, string CodTerminal, string IdTransaccion)
         {
@@ -33,7 +42,7 @@ namespace WSCobrosSoftland.Controllers
 
             this.logger.Information($"Se recibió anulacion de pago, Boca: {CodBoca}, Terminal: {CodTerminal}, " +
                               $"Id Transaccion Pago a anular:{IdTransaccion}");
-
+          
 
             bool Autenticado = await _AuthenticationService.ValidoAutenticacion(autentic1, autentic2);
 
