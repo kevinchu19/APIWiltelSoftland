@@ -52,7 +52,10 @@ namespace WSCobrosSoftland.Repositories
                 SarVtrrchErrmsg = "",
                 SarVtUltopr = "A",
                 SarVtUserid = "WEBAPI",
-                UsrVtrrchWsestad = status
+                UsrVtrrchWsestad = status,
+                UsrVtrrchCodboc = codBoca,
+                UsrVtrrchCodter = codTerminal,
+                UsrVtrrchCodent = Int16.Parse(codEnte)
             };
 
 

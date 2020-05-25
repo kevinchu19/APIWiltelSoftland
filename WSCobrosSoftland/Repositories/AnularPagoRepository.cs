@@ -42,7 +42,9 @@ namespace WSCobrosSoftland.Repositories
                 SarVtrrchErrmsg = "",
                 SarVtUltopr = "A",
                 SarVtUserid = "WEBAPI",
-                UsrVtrrchWsestad = 999
+                UsrVtrrchWsestad = 999,
+                UsrVtrrchCodboc = codBoca,
+                UsrVtrrchCodter = codTerminal
             };
 
             try

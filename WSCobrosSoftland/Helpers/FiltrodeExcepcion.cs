@@ -11,11 +11,17 @@ namespace WSCobrosSoftland.Helpers
     {
         private RespEstadoTransaccion respuestaPorExcepcionPost = new RespEstadoTransaccion();
         private RespRecuperarDeudas respuestaPorExcepcionGet = new RespRecuperarDeudas();
+        public Serilog.ILogger logger { get; }
+
+        public FiltrodeExcepcion(Serilog.ILogger logger)
+        {
+            this.logger = logger;
+        }
 
         public override void OnException(ExceptionContext context)
         {
-            
 
+            logger.Fatal(context.Exception.Message);
             //if (context.ActionDescriptor.ToString() == "WSCobrosSoftland.Controllers.PagarDeudasController.Post")
             //{
             //    respuestaPorExcepcionPost.Estado = 999;

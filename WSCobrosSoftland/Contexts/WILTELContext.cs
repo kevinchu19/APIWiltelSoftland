@@ -528,6 +528,18 @@ namespace WSCobrosSoftland.Contexts
                     .IsUnicode(false);
 
                 entity.Property(e => e.UsrVtrrchWsestad).HasColumnName("USR_VTRRCH_WSESTAD");
+
+                entity.Property(e => e.UsrVtrrchCodboc)
+                    .HasColumnName("USR_VTRRCH_CODBOC")
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrVtrrchCodter)
+                    .HasColumnName("USR_VTRRCH_CODTER")
+                    .HasMaxLength(12)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsrVtrrchCodent).HasColumnName("USR_VTRRCH_CODENT");
             });
 
             modelBuilder.Entity<UsrWstush>(entity =>

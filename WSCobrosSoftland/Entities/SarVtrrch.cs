@@ -35,5 +35,8 @@ namespace WSCobrosSoftland.Entities
         public string SarVtCmpver { get; set; }
         public string UsrVtrrchArch { get; set; }
         public int UsrVtrrchWsestad { get; set; }
+        public string UsrVtrrchCodboc { get; set; }
+        public string UsrVtrrchCodter { get; set; }
+        public Int16 UsrVtrrchCodent { get; set; }
     }
 }

@@ -61,7 +61,7 @@ namespace WSCobrosSoftland.Controllers
                 response.Estado = 200; //Datos de autenticación incorrectos
             }
 
-            logger.Information($"Respuesta:{Response.ToString()}");
+            logger.Information($"Respuesta:{response.ToString()}");
 
             return response;
         }

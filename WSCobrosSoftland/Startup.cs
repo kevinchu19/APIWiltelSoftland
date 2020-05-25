@@ -44,12 +44,7 @@ namespace WSCobrosSoftland
                 var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
                 config.IncludeXmlComments(xmlpath);
-            }
-
-
-            
-            
-            );
+            });
 
             
             services.AddCors();
@@ -60,7 +55,7 @@ namespace WSCobrosSoftland
                 .AddXmlDataContractSerializerFormatters();
             services.AddMvc(Options =>
             {
-                Options.Filters.Add(new FiltrodeExcepcion());
+                Options.Filters.Add(typeof(FiltrodeExcepcion));
             }).
                 SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -99,7 +94,7 @@ namespace WSCobrosSoftland
 
             app.UseSwaggerUI(config =>
             {
-                config.SwaggerEndpoint("/swagger/v1/swagger.json", "WSCobros");
+                config.SwaggerEndpoint("../swagger/v1/swagger.json", "WSCobros");
             });
 
             if (env.IsDevelopment())
