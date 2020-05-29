@@ -40,7 +40,7 @@ namespace WSCobrosSoftland.Repositories
             SarVtrrch HeaderCobranza = new SarVtrrch
             {
                 SarVtrrchIdenti = idTransaccion,
-                SarVtrrchStatus = "N",
+                SarVtrrchStatus = "W",
                 SarVtrrchCodcom = await RecuperarEquivalencia("WEBSER", "CODCOM", codEnte),
                 SarVtrrchNrocta = comprobanteDeuda.Nrocta,
                 SarVtrrchCodemp = "WILTEL2",
@@ -128,7 +128,7 @@ namespace WSCobrosSoftland.Repositories
         {
             RespPagarDeudas resultado = new RespPagarDeudas();
 
-            await InsertaCwJmSchedules("USR_RC");
+            await InsertaCwJmSchedules("WSCOBR");
 
             //Para dejar tiempo a Softland a que procese el recibo
             Thread.Sleep(10000);
