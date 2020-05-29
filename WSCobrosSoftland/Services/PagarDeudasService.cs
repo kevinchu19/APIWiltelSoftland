@@ -50,13 +50,14 @@ namespace WSCobrosSoftland.Services
                 return response;
             }
 
-            if (comprobanteDeuda.Fchvnc.Date < DateTime.Now.Date)
-            {
-                response.Estado = 3; //Deuda vencida
-                response.NroOperacion = "";
-                Logger.Warning($"Deuda vencida, el día {comprobanteDeuda.Fchvnc.Date} - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
-                return response;
-            }
+            //A pedido de Diego Ballario, se elimina este control (Mail 29/05/2020)
+            //if (comprobanteDeuda.Fchvnc.Date < DateTime.Now.Date)
+            //{
+            //    response.Estado = 3; //Deuda vencida
+            //    response.NroOperacion = "";
+            //    Logger.Warning($"Deuda vencida, el día {comprobanteDeuda.Fchvnc.Date} - Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
+            //    return response;
+            //}
 
             if (comprobanteDeuda.Saldo == 0)
             {
