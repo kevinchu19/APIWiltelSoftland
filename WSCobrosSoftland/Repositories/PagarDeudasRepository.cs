@@ -69,7 +69,7 @@ namespace WSCobrosSoftland.Repositories
                 SarVtrrcc01Cuotas = 1,
                 SarVtrrcc01Impnac = null,
                 SarVtrrcc01Impext = null,
-                SarVtrrcc01Cannac = comprobanteDeuda.Import,
+                SarVtrrcc01Cannac = Convert.ToDecimal(importe),
                 SarVtrrcc01Canext = null,
                 SarVtFecalt = DateTime.Now,
                 SarVtFecmod = DateTime.Now,
@@ -85,7 +85,7 @@ namespace WSCobrosSoftland.Repositories
                 SarVtrrcc04Modcpt = null,
                 SarVtrrcc04Tipcpt = await RecuperarEquivalencia("WEBSER", "TIPCPT", codEnte),
                 SarVtrrcc04Codcpt = await RecuperarEquivalencia("WEBSER", "CODCPT", codEnte),
-                SarVtrrcc04Import = comprobanteDeuda.Import,
+                SarVtrrcc04Import = Convert.ToDecimal(importe),
                 SarVtFecalt = DateTime.Now,
                 SarVtFecmod = DateTime.Now,
                 SarVtUserid = "WEBAPI",
@@ -143,7 +143,7 @@ namespace WSCobrosSoftland.Repositories
                     resultado.Estado = 0;
                     resultado.NroOperacion = HeaderCobranza.SarVtrrchCodfor + "|" + HeaderCobranza.SarVtrrchNrofor.ToString();
                     break;
-                case "N":
+                case "W":
                     Logger.Warning($"El pago se recibio, pero Softland aún no lo proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
                     resultado.Estado = 0;
                     resultado.NroOperacion  = "Pago recibido, numero de comprobante pendiente de confirmar";

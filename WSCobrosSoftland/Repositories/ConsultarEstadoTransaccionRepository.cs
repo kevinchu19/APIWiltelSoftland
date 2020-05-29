@@ -38,7 +38,7 @@ namespace WSCobrosSoftland.Repositories
                             response.NroOperacion = "";
                             response.Estado = 999;
                             break;
-                        case "N":
+                        case "W":
                             response.NroOperacion = "Pago recibido, numero de comprobante pendiente de confirmar";
                             response.Estado = 0;
                             break;

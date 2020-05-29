@@ -115,7 +115,7 @@ namespace WSCobrosSoftland.Repositories
         {
             RespAnular respuesta = new RespAnular();
 
-            await InsertaCwJmSchedules("USR_RC");
+            await InsertaCwJmSchedules("WSCOBR");
 
             //Para dejar tiempo a Softland a que procese el recibo
             Thread.Sleep(10000);
@@ -129,7 +129,7 @@ namespace WSCobrosSoftland.Repositories
                     Logger.Information($"La anulación se recibio, procesada ok por Softland");
                     respuesta.Estado = 0;
                     break;
-                case "N":
+                case "W":
                     Logger.Warning($"La anulación se recibio, pero Softland aún no la proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
                     respuesta.Estado = 999;
                     break;
