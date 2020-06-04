@@ -72,7 +72,8 @@ namespace WSCobrosSoftland.Services
                 response.Estado = 10; //El importe no puede ser superior al monto adeudado del comprobante
                 response.NroOperacion = "";
                 Logger.Warning($"El importe no puede ser superior al monto adeudado del comprobante - " +
-                    $"Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}");
+                    $"Codfor: {comprobanteDeuda.Codfor}, Nrofor: {comprobanteDeuda.Nrofor}" +
+                    $"Monto adeudado:{comprobanteDeuda.Saldo}, Importe pagado: {Importe}");
                 return response;
             }
 
