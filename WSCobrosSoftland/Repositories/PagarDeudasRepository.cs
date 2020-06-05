@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using WSCobrosSoftland.Contexts;
@@ -131,7 +132,7 @@ namespace WSCobrosSoftland.Repositories
             await InsertaCwJmSchedules("WSCOBR");
 
             //Para dejar tiempo a Softland a que procese el recibo
-            Thread.Sleep(10000);
+            Thread.Sleep(15000);
 
             //Para recargar la entidad con los datos del recibo impactado en Softland.
             await Context.Entry(HeaderCobranza).ReloadAsync();

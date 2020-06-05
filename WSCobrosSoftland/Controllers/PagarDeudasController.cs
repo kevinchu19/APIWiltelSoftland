@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using WSCobrosSoftland.Models;
 using WSCobrosSoftland.Repositories;
@@ -52,6 +54,14 @@ namespace WSCobrosSoftland.Controllers
 
             if (Autenticado == true)
             {
+                if (CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator == ".") //punto como separador decimal
+                {
+                    Importe = Importe.Replace(",", ".");
+                }
+                if (CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator == ",") //coma como separador decimal
+                {
+                    Importe = Importe.Replace(".", ",");
+                }
                 response = await Service.Post(CodBoca, CodTerminal,
                                                  CodDeuda, CodEnte,
                                                  IdTransaccion, Importe);
