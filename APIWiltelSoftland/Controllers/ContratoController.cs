@@ -32,7 +32,6 @@ namespace APIWiltelSoftland.Controllers
         /// <param name="codcon">Tipo de contrato</param>
         /// <param name="nrocon">Código de contrato</param>
         /// <param name="nroext">Número de extensión</param>
-        /// <response examples="{'application/json' : {'id' : '123', 'firstname' : 'John', 'lastname' : 'Smith'}}>
         /// <returns></returns>
         [HttpPatch("{codemp}/{codcon}/{nrocon}/{nroext}")]
         public async Task<ActionResult<PatchContratoResponse>> Patch(string codemp, string codcon, string nrocon, int nroext, [FromBody] JsonPatchDocument patchDocument)

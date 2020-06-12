@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>WSCobrosSoftland</name>
+        <name>APIWiltelSoftland</name>
     </assembly>
     <members>
-        <member name="M:WSCobrosSoftland.Controllers.AnularPagoController.Post(System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:APIWiltelSoftland.Controllers.AnularPagoController.Post(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Permite generar la anulación de una transacción previamente enviada
             </summary>
@@ -15,7 +15,7 @@
             <param name="IdTransaccion">Identificador unívoco de transaccion</param>
             <returns></returns>
         </member>
-        <member name="M:WSCobrosSoftland.Controllers.ConsultarEstadoTransaccionController.Get(System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:APIWiltelSoftland.Controllers.ConsultarEstadoTransaccionController.Get(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Permite consultar el estado de una transaccion previamente enviada
             </summary>
@@ -26,7 +26,8 @@
             <param name="IdTransaccion">Identificador unívoco de transaccion</param>
             <returns></returns>
         </member>
-        <member name="M:WSCobrosSoftland.Controllers.PagarDeudasController.Post(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+        <!-- El comentario XML con formato incorrecto se ha omitido para el miembro "M:APIWiltelSoftland.Controllers.ContratoController.Patch(System.String,System.String,System.String,System.Int32,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument)" -->
+        <member name="M:APIWiltelSoftland.Controllers.PagarDeudasController.Post(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Genera un recibo en el sistema ERP
             </summary>
@@ -40,7 +41,7 @@
             <param name="Importe">Importe pagado</param>
             <returns></returns>
         </member>
-        <member name="M:WSCobrosSoftland.Controllers.RecuperarDeudasController.Get(System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:APIWiltelSoftland.Controllers.RecuperarDeudasController.Get(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Devuelve deudas pendientes de pago de acuerdo a los parametros ingresados
             </summary>

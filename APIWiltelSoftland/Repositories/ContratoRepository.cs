@@ -22,9 +22,9 @@ namespace APIWiltelSoftland.Repositories
         }
 
         public async Task<Cvmcth> RecuperaContrato(string codemp, string codcon, string nrocon, int nroext){
-            return await Context.Cvmcth.FirstOrDefaultAsync(contrato => contrato.CvmcthCodemp == codemp &&
-                                                             contrato.CvmcthCodcon == codcon &&
-                                                             contrato.CvmcthNrocon == nrocon &&
+            return await Context.Cvmcth.FirstOrDefaultAsync(contrato => contrato.CvmcthCodemp.Trim() == codemp.Trim() &&
+                                                             contrato.CvmcthCodcon.Trim() == codcon.Trim() &&
+                                                             contrato.CvmcthNrocon.Trim() == nrocon.Trim() &&
                                                              contrato.CvmcthNroext == nroext);
         }
 
