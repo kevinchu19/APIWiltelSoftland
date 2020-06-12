@@ -1,0 +1,16 @@
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.deps.json
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.runtimeconfig.json
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.runtimeconfig.dev.json
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.dll
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.pdb
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.xml
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.csprojAssemblyReference.cache
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.csproj.CoreCompileInputs.cache
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.RazorAssemblyInfo.cache
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.RazorAssemblyInfo.cs
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.AssemblyInfoInputs.cache
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.AssemblyInfo.cs
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.RazorTargetAssemblyInfo.cache
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.dll
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.xml
+C:\Users\kt\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.pdb
