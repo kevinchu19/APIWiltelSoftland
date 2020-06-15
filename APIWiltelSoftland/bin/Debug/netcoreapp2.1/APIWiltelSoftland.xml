@@ -26,7 +26,16 @@
             <param name="IdTransaccion">Identificador unívoco de transaccion</param>
             <returns></returns>
         </member>
-        <!-- El comentario XML con formato incorrecto se ha omitido para el miembro "M:APIWiltelSoftland.Controllers.ContratoController.Patch(System.String,System.String,System.String,System.Int32,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument)" -->
+        <member name="M:APIWiltelSoftland.Controllers.ContratoController.Patch(System.String,System.String,System.String,System.Int32,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument)">
+            <summary>
+            Permite modificar el estado de un contrato a través de un JSONPatchDocument enviado en el body
+            </summary>
+            <param name="codemp">Codigo de Empresa del contrato</param>
+            <param name="codcon">Tipo de contrato</param>
+            <param name="nrocon">Código de contrato</param>
+            <param name="nroext">Número de extensión</param>
+            <returns></returns>
+        </member>
         <member name="M:APIWiltelSoftland.Controllers.PagarDeudasController.Post(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Genera un recibo en el sistema ERP

@@ -1,7 +1,9 @@
-﻿using APIWiltelSoftland.Models;
+﻿using APIWiltelSoftland.Helpers;
+using APIWiltelSoftland.Models;
 using APIWiltelSoftland.Repositories;
 using APIWiltelSoftland.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,7 +15,9 @@ using System.Threading.Tasks;
 
 namespace APIWiltelSoftland.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
+    [ApiController]
     public class ContratoController: ControllerBase
     {
         public Serilog.ILogger logger { get; }
@@ -34,13 +38,13 @@ namespace APIWiltelSoftland.Controllers
         /// <param name="nroext">Número de extensión</param>
         /// <returns></returns>
         [HttpPatch("{codemp}/{codcon}/{nrocon}/{nroext}")]
-        public async Task<ActionResult<PatchContratoResponse>> Patch(string codemp, string codcon, string nrocon, int nroext, [FromBody] JsonPatchDocument patchDocument)
+        public async Task<ActionResult<APIWiltelResponse>> Patch(string codemp, string codcon, string nrocon, int nroext, [FromBody] JsonPatchDocument patchDocument)
         {
-            PatchContratoResponse response = new PatchContratoResponse { };
+            APIWiltelResponse response = new APIWiltelResponse { };
 
             if (patchDocument == null)
             {
-                return BadRequest();                
+                throw new BusinessException("No se recibió cuerpo de la petición o el mismo tiene un formato incorrecto");       
             }
 
             var editablePaths = new List<string> { "/CvmcthEstact" };
@@ -51,13 +55,8 @@ namespace APIWiltelSoftland.Controllers
             }
             else
             {
-                response.mensaje = "Sólo se puede editar el estado del contrato.";
-                return BadRequest(response);
-            }
-
-
-
-            
+                throw new BusinessException("Sólo se puede editar el estado del contrato.");
+            }           
 
         }
     }

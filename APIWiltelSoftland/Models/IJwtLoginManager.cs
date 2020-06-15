@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace APIWiltelSoftland.Models
 {
-    public class PatchContratoResponse
+    public interface IJwtLoginManager
     {
-        public string mensaje { get; set; }
+
+        Task<string> LoginWithJwt(string usuario, string password);
     }
 }

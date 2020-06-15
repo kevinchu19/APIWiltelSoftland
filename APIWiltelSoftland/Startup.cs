@@ -23,6 +23,9 @@ using APIWiltelSoftland.Repositories;
 using APIWiltelSoftland.Services;
 using APIWiltelSoftland.Entities;
 using APIWiltelSoftland.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace APIWiltelSoftland
 {
@@ -60,6 +63,27 @@ namespace APIWiltelSoftland
                 Options.Filters.Add(typeof(FiltrodeExcepcion));
             }).
                 SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var key = Configuration["key"];
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddScoped<APIWiltelLoginRepository>();
+            services.AddScoped<APIWiltelLoginService>();
 
             services.AddScoped<WSCobrosAuthenticationRepository>();
             services.AddScoped<WSCobrosAuthenticationService>();
@@ -115,6 +139,7 @@ namespace APIWiltelSoftland
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseMvc();
