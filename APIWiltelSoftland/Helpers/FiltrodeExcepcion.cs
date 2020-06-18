@@ -39,7 +39,7 @@ namespace APIWiltelSoftland.Helpers
 
             switch (context.Exception.GetType().ToString())
             {
-                case "APIWiltelSoftland.Helpers.BusinessException":
+                case "APIWiltelSoftland.Helpers.BadRequestException":
                     response.estado = 400;
                     response.titulo = "Bad Request";
                     context.Result = new BadRequestObjectResult(response);

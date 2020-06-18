@@ -21,7 +21,7 @@ namespace APIWiltelSoftland.Services
             Logger = logger;
         }
 
-        public async Task<ActionResult> Patch(string codemp, string codcon, string nrocon, int nroext,
+        public async Task Patch(string codemp, string codcon, string nrocon, int nroext,
                                               JsonPatchDocument patchDocument)
         {
             var resultOk = new OkResult();
@@ -44,11 +44,11 @@ namespace APIWiltelSoftland.Services
                             if (contrato.UsrCvmcthModifi == "S")
                             {
                                 //El contrato se encuentra modificado, no puede actualizar el estado.
-                                throw new BusinessException($"El contrato se encuentra modificado, no puede actualizar el estado");
+                                throw new BadRequestException($"El contrato se encuentra modificado, no puede actualizar el estado");
                             }
                             break;
                         default:
-                            throw new BusinessException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
+                            throw new BadRequestException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
                     }
                     break;
                 case "02":
@@ -59,7 +59,7 @@ namespace APIWiltelSoftland.Services
                             await Repository.ActualizaFechasCierreExtension(contrato);
                             break;
                         default:
-                            throw new BusinessException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
+                            throw new BadRequestException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
                     }
                     break;
 
@@ -73,7 +73,7 @@ namespace APIWiltelSoftland.Services
                         case "08": //Standby
                             break;
                         default:
-                            throw new BusinessException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
+                            throw new BadRequestException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
                     }
                     break;
 
@@ -84,7 +84,7 @@ namespace APIWiltelSoftland.Services
                             await Repository.Patch(contrato, patchDocument);
                             break;
                         default:
-                            throw new BusinessException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
+                            throw new BadRequestException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
                     }
                     break;
 
@@ -95,16 +95,16 @@ namespace APIWiltelSoftland.Services
                             await Repository.Patch(contrato, patchDocument);
                             break;
                         default:
-                            throw new BusinessException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
+                            throw new BadRequestException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
                     }
                     break;
 
                 default:
                     //Ninguna de las combinaciones esperadas
-                    throw new BusinessException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
+                    throw new BadRequestException($"No es posible realizar el cambio de estado solicitado debido al estado actual del contrato. Estado actual:{contrato.CvmcthEstact}, Nuevo estado:{nuevoEstado}");
             }
 
-            return resultOk;
+            
         }
     }
 }

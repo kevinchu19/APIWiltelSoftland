@@ -30,10 +30,29 @@
             <summary>
             Permite modificar el estado de un contrato a través de un JSONPatchDocument enviado en el body
             </summary>
+            <remarks>Composicion del json patch document: <br></br>
+             - op: Operacion. Indica el tipo de operacion a realizar (siempre valor "replace")<br></br>
+             - path: Indica nombre del campo a modificar (siempre valor "/CvmtchEstact")<br></br>
+             - value: Indica nuevo valor a actualizar del campo asignado en el path
+            </remarks>
             <param name="codemp">Codigo de Empresa del contrato</param>
             <param name="codcon">Tipo de contrato</param>
             <param name="nrocon">Código de contrato</param>
             <param name="nroext">Número de extensión</param>
+            <param name="patchDocument">Objeto "JsonPatchDocument" para realizar el cambio de estado del contrato</param>
+            <response code="401">Unauthorized. No se ha indicado o es incorrecto el Token JWT de acceso.</response>              
+            <response code="200">OK. Estado del contrato modificado sin impedimentos. </response>        
+            <response code="404">Not Found. No se ha encontrado el contrato solicitado.</response>
+            <response code="400">Bad Request. Existe un error de validación que no permite modificar el contrato, vendrá acompañado con su correspondiente mensaje.</response>
+            <returns></returns>
+        </member>
+        <member name="M:APIWiltelSoftland.Controllers.LoginController.Post(APIWiltelSoftland.Controllers.Usuario)">
+            <summary>
+            Permite obtener el token de acceso para la utilización de los endpoints protegidos.
+            </summary>
+            <remarks>
+            Consiste en el envio de un usuario y una contraseña y se retorna un objeto JSON con el atributo "token" que será válido durante 1 hora.
+            </remarks>
             <returns></returns>
         </member>
         <member name="M:APIWiltelSoftland.Controllers.PagarDeudasController.Post(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">

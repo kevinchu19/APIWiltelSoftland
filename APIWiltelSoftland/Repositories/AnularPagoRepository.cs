@@ -28,7 +28,7 @@ namespace APIWiltelSoftland.Repositories
             {
                 SarVtrrchIdenti = "A" + idTransaccion,
                 SarVtrrchStatus = "A",
-                SarVtrrchCodcom = await RecuperarEquivalencia("WEBSER","ANUCOM",codBoca),
+                SarVtrrchCodcom = await RecuperarEquivalencia("WEBSER","ANUCOM",""),
                 SarVtrrchNrocta = "",
                 SarVtrrchCodemp = "WILTEL2",
                 SarVtrrchModfor = "VT",

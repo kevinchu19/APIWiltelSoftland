@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace APIWiltelSoftland.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
+    
     public class LoginController: ControllerBase
     {
         private readonly Serilog.ILogger logger;
@@ -21,6 +23,13 @@ namespace APIWiltelSoftland.Controllers
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Permite obtener el token de acceso para la utilización de los endpoints protegidos.
+        /// </summary>
+        /// <remarks>
+        /// Consiste en el envio de un usuario y una contraseña y se retorna un objeto JSON con el atributo "token" que será válido durante 1 hora.
+        /// </remarks>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Usuario usuario)
         {
@@ -29,7 +38,9 @@ namespace APIWiltelSoftland.Controllers
             {
                 return Unauthorized();
             }
-            return Ok(token);
+            return Ok(new APIWIltelLoginResponse {
+                token = token
+            });
         }
     }
 

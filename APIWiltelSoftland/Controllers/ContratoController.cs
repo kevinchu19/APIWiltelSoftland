@@ -4,6 +4,7 @@ using APIWiltelSoftland.Repositories;
 using APIWiltelSoftland.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,30 +33,50 @@ namespace APIWiltelSoftland.Controllers
         /// <summary>
         /// Permite modificar el estado de un contrato a través de un JSONPatchDocument enviado en el body
         /// </summary>
+        /// <remarks>Composicion del json patch document: <br></br>
+        ///  - op: Operacion. Indica el tipo de operacion a realizar (siempre valor "replace")<br></br>
+        ///  - path: Indica nombre del campo a modificar (siempre valor "/CvmtchEstact")<br></br>
+        ///  - value: Indica nuevo valor a actualizar del campo asignado en el path
+        /// </remarks>
         /// <param name="codemp">Codigo de Empresa del contrato</param>
         /// <param name="codcon">Tipo de contrato</param>
         /// <param name="nrocon">Código de contrato</param>
         /// <param name="nroext">Número de extensión</param>
+        /// <param name="patchDocument">Objeto "JsonPatchDocument" para realizar el cambio de estado del contrato</param>
+        /// <response code="401">Unauthorized. No se ha indicado o es incorrecto el Token JWT de acceso.</response>              
+        /// <response code="200">OK. Estado del contrato modificado sin impedimentos. </response>        
+        /// <response code="404">Not Found. No se ha encontrado el contrato solicitado.</response>
+        /// <response code="400">Bad Request. Existe un error de validación que no permite modificar el contrato, vendrá acompañado con su correspondiente mensaje.</response>
         /// <returns></returns>
         [HttpPatch("{codemp}/{codcon}/{nrocon}/{nroext}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIWiltelResponse>> Patch(string codemp, string codcon, string nrocon, int nroext, [FromBody] JsonPatchDocument patchDocument)
         {
             APIWiltelResponse response = new APIWiltelResponse { };
 
-            if (patchDocument == null)
+
+            if (patchDocument == null | !ModelState.IsValid) 
             {
-                throw new BusinessException("No se recibió cuerpo de la petición o el mismo tiene un formato incorrecto");       
+                throw new BadRequestException("No se recibió cuerpo de la petición o el mismo tiene un formato incorrecto");       
             }
 
             var editablePaths = new List<string> { "/CvmcthEstact" };
 
             if (patchDocument.Operations.Any(operation => editablePaths.Contains(operation.path)))
             {
-                return await Service.Patch(codemp, codcon, nrocon, nroext, patchDocument);
+                await Service.Patch(codemp, codcon, nrocon, nroext, patchDocument);
+                return new APIWiltelResponse
+                {
+                    estado = 200,
+                    titulo = "Transacción ok",
+                    mensaje = "El contrato ha sido modificado exitosamente."
+                };
             }
             else
             {
-                throw new BusinessException("Sólo se puede editar el estado del contrato.");
+                throw new BadRequestException("Sólo se puede editar el estado del contrato.");
             }           
 
         }

@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace APIWiltelSoftland.Helpers
 {
-    public class BusinessException: Exception
+    public class BadRequestException: Exception
     {
-        public BusinessException()
+        public BadRequestException()
         {
 
         }
 
-        public BusinessException(string message):base(message)
+        public BadRequestException(string message):base(message)
         {
         }
     }

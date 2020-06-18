@@ -26,6 +26,7 @@ using APIWiltelSoftland.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 namespace APIWiltelSoftland
 {
@@ -45,15 +46,42 @@ namespace APIWiltelSoftland
         {
             services.AddSwaggerGen(config =>
             {
-                config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo{ Title = "APIWiltel", Version = "v1" });
+                config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "APIWiltel", Version = "v1" });
                 var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
                 config.IncludeXmlComments(xmlpath);
+                config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"Ingresar el término 'Bearer', un espacio, y el token de acceso provisto por el endpoint 'Login'
+                      Por ejemplo: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                config.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                    },
+                        new List<string>()
+                    }
+                });
             });
 
-            
+
             services.AddCors();
-            services.AddDbContext<WILTELContext>(options => 
+            services.AddDbContext<WILTELContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
             services.AddMvc()
