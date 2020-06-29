@@ -26,7 +26,7 @@
             <param name="IdTransaccion">Identificador unívoco de transaccion</param>
             <returns></returns>
         </member>
-        <member name="M:APIWiltelSoftland.Controllers.ContratoController.Patch(System.String,System.String,System.String,System.Int32,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument)">
+        <member name="M:APIWiltelSoftland.Controllers.ContratoController.Patch(System.String,System.String,System.String,System.Int32,System.DateTime,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument)">
             <summary>
             Permite modificar el estado de un contrato a través de un JSONPatchDocument enviado en el body
             </summary>
@@ -39,6 +39,7 @@
             <param name="codcon">Tipo de contrato</param>
             <param name="nrocon">Código de contrato</param>
             <param name="nroext">Número de extensión</param>
+            <param name="fechacierreot">Fecha de cierre de la orden de trabajo que generó el cambio de estado (Formato: MM/DD/YYYY)</param>
             <param name="patchDocument">Objeto "JsonPatchDocument" para realizar el cambio de estado del contrato</param>
             <response code="401">Unauthorized. No se ha indicado o es incorrecto el Token JWT de acceso.</response>              
             <response code="200">OK. Estado del contrato modificado sin impedimentos. </response>        

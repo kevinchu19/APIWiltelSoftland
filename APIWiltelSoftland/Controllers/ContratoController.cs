@@ -42,6 +42,7 @@ namespace APIWiltelSoftland.Controllers
         /// <param name="codcon">Tipo de contrato</param>
         /// <param name="nrocon">Código de contrato</param>
         /// <param name="nroext">Número de extensión</param>
+        /// <param name="fechacierreot">Fecha de cierre de la orden de trabajo que generó el cambio de estado (Formato: AAAA/MM/DD)</param>
         /// <param name="patchDocument">Objeto "JsonPatchDocument" para realizar el cambio de estado del contrato</param>
         /// <response code="401">Unauthorized. No se ha indicado o es incorrecto el Token JWT de acceso.</response>              
         /// <response code="200">OK. Estado del contrato modificado sin impedimentos. </response>        
@@ -52,7 +53,7 @@ namespace APIWiltelSoftland.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIWiltelResponse>> Patch(string codemp, string codcon, string nrocon, int nroext, [FromBody] JsonPatchDocument patchDocument)
+        public async Task<ActionResult<APIWiltelResponse>> Patch(string codemp, string codcon, string nrocon, int nroext, DateTime fechacierreot ,[FromBody] JsonPatchDocument patchDocument)
         {
             APIWiltelResponse response = new APIWiltelResponse { };
 
@@ -66,7 +67,7 @@ namespace APIWiltelSoftland.Controllers
 
             if (patchDocument.Operations.Any(operation => editablePaths.Contains(operation.path)))
             {
-                await Service.Patch(codemp, codcon, nrocon, nroext, patchDocument);
+                await Service.Patch(codemp, codcon, nrocon, nroext, fechacierreot, patchDocument);
                 return new APIWiltelResponse
                 {
                     estado = 200,
