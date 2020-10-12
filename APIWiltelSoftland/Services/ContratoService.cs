@@ -34,6 +34,8 @@ namespace APIWiltelSoftland.Services
 
             object nuevoEstado = patchDocument.Operations[0].value;
 
+            Logger.Information($"Nuevo estado a asignar: {nuevoEstado}");
+
             ResultadoPatchContrato resultadoPatch = await Repository.Patch(contrato, fechacierreot,nuevoEstado.ToString());
 
             if (resultadoPatch.actualizado == "N")

@@ -57,6 +57,7 @@ namespace APIWiltelSoftland.Controllers
         {
             APIWiltelResponse response = new APIWiltelResponse { };
 
+            logger.Information($"Se recibió una solicitud de cambio de estado del contrato: {codemp} - {codcon} - {nrocon} - {nroext}. Fecha de cierre de OT: {fechacierreot}");
 
             if (patchDocument == null | !ModelState.IsValid) 
             {
