@@ -132,7 +132,8 @@ namespace APIWiltelSoftland.Repositories
             await InsertaCwJmSchedules("WSCOBR");
 
             //Para dejar tiempo a Softland a que procese el recibo
-            Thread.Sleep(15000);
+            //Se comenta el 13/11/2020 a pedido de Diego Ballario (Mail 28/10/2020)
+            //Thread.Sleep(15000);
 
             //Para recargar la entidad con los datos del recibo impactado en Softland.
             await Context.Entry(HeaderCobranza).ReloadAsync();

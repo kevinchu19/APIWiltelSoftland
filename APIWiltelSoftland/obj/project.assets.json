@@ -12661,23 +12661,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\kt\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\ktchu\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kt\\source\\repos\\APIWiltelSoftland\\APIWiltelSoftland\\APIWiltelSoftland.csproj",
+      "projectUniqueName": "C:\\Users\\ktchu\\source\\repos\\APIWiltelSoftland\\APIWiltelSoftland\\APIWiltelSoftland.csproj",
       "projectName": "APIWiltelSoftland",
-      "projectPath": "C:\\Users\\kt\\source\\repos\\APIWiltelSoftland\\APIWiltelSoftland\\APIWiltelSoftland.csproj",
-      "packagesPath": "C:\\Users\\kt\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kt\\source\\repos\\APIWiltelSoftland\\APIWiltelSoftland\\obj\\",
+      "projectPath": "C:\\Users\\ktchu\\source\\repos\\APIWiltelSoftland\\APIWiltelSoftland\\APIWiltelSoftland.csproj",
+      "packagesPath": "C:\\Users\\ktchu\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ktchu\\source\\repos\\APIWiltelSoftland\\APIWiltelSoftland\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\kt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ktchu\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12725,6 +12721,7 @@
             "version": "[2.1.2, )"
           },
           "Microsoft.NETCore.App": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.1.0, )",
             "autoReferenced": true
@@ -12747,10 +12744,16 @@
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
       }
     }
   }
