@@ -34,7 +34,7 @@ namespace APIWiltelSoftland.Repositories
 
                     await sql.OpenAsync();
                     await cmd.ExecuteNonQueryAsync();
-                    Logger.Information("Se insertó cwjmschedules");
+                    //Logger.Information("Se insertó cwjmschedules");
                 }
             }
         }

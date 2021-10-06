@@ -19,14 +19,12 @@ C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcor
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.pdb
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\appsettings.Development.json
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\appsettings.json
-C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.deps.json
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.runtimeconfig.json
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.runtimeconfig.dev.json
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.dll
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.pdb
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\bin\Debug\netcoreapp2.1\APIWiltelSoftland.xml
-C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.csprojAssemblyReference.cache
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.AssemblyInfoInputs.cache
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.AssemblyInfo.cs
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.csproj.CoreCompileInputs.cache
@@ -34,3 +32,6 @@ C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcor
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.RazorAssemblyInfo.cs
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.RazorTargetAssemblyInfo.cache
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.genruntimeconfig.cache
+C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.csproj.AssemblyReference.cache
+C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Debug\netcoreapp2.1\APIWiltelSoftland.GeneratedMSBuildEditorConfig.editorconfig

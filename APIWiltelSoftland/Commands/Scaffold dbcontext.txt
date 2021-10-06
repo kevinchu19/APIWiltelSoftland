@@ -1,1 +1,4 @@
-﻿Scaffold-DbContext "server=.;user=sa;password=Password1!;database=WILTEL_062020" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -Tables VTRMVH
+﻿Instalar Nuget package EntityFrameworkCore
+Instalar Nuget package EntityFrameworkCore.SqlServer
+Instalar Nuget package EntityFrameworkCore.Tools
+Scaffold-DbContext "server=.;user=sa;password=Password1!;database=WILTEL_062020" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -Tables VTRMVH

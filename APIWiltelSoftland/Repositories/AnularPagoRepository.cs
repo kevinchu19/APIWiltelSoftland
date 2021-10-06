@@ -51,7 +51,7 @@ namespace APIWiltelSoftland.Repositories
             {
                 Context.SarVtrrch.Add(HeaderCobranza);
                 await Context.SaveChangesAsync();
-                Logger.Information("Se insertó registro de anulación en tabla SAR_VTRRCH ");
+                //Logger.Information("Se insertó registro de anulación en tabla SAR_VTRRCH ");
             }
             catch (Exception error)
             {

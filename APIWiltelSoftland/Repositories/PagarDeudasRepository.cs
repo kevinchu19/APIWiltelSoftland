@@ -56,7 +56,8 @@ namespace APIWiltelSoftland.Repositories
                 UsrVtrrchWsestad = status,
                 UsrVtrrchCodboc = codBoca,
                 UsrVtrrchCodter = codTerminal,
-                UsrVtrrchCodent = Int16.Parse(codEnte)
+                UsrVtrrchCodent = Int16.Parse(codEnte),
+                UsrVtrrchUtpaor = "S"
             };
 
 
@@ -72,6 +73,7 @@ namespace APIWiltelSoftland.Repositories
                 SarVtrrcc01Impext = null,
                 SarVtrrcc01Cannac = Convert.ToDecimal(importe),
                 SarVtrrcc01Canext = null,
+                SarVtOalias = "SAR_VTRRCC",
                 SarVtFecalt = DateTime.Now,
                 SarVtFecmod = DateTime.Now,
                 SarVtUserid = "WEBAPI",
@@ -87,6 +89,7 @@ namespace APIWiltelSoftland.Repositories
                 SarVtrrcc04Tipcpt = await RecuperarEquivalencia("WEBSER", "TIPCPT", codEnte),
                 SarVtrrcc04Codcpt = await RecuperarEquivalencia("WEBSER", "CODCPT", codEnte),
                 SarVtrrcc04Import = Convert.ToDecimal(importe),
+                SarVtOalias = "SAR_VTRRCC",
                 SarVtFecalt = DateTime.Now,
                 SarVtFecmod = DateTime.Now,
                 SarVtUserid = "WEBAPI",
@@ -108,7 +111,7 @@ namespace APIWiltelSoftland.Repositories
 
                 await Context.SaveChangesAsync();
 
-                Logger.Information("Se insertaron registros en tablas SAR_VTRRCH e hijas");
+              //  Logger.Information("Se insertaron registros en tablas SAR_VTRRCH e hijas");
             }
             catch (Exception error)
             {
@@ -129,7 +132,7 @@ namespace APIWiltelSoftland.Repositories
         {
             RespPagarDeudas resultado = new RespPagarDeudas();
 
-            await InsertaCwJmSchedules("WSCOBR");
+            //await InsertaCwJmSchedules("WSCOBR");
 
             //Para dejar tiempo a Softland a que procese el recibo
             //Se comenta el 13/11/2020 a pedido de Diego Ballario (Mail 28/10/2020)

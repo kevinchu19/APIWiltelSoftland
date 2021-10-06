@@ -544,6 +544,11 @@ namespace APIWiltelSoftland.Contexts
                     .IsUnicode(false);
 
                 entity.Property(e => e.UsrVtrrchCodent).HasColumnName("USR_VTRRCH_CODENT");
+
+                entity.Property(e => e.UsrVtrrchUtpaor)
+                    .HasColumnName("USR_VTRRCH_UTPAOR")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<UsrWstush>(entity =>

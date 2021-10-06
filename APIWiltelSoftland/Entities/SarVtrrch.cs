@@ -38,5 +38,6 @@ namespace APIWiltelSoftland.Entities
         public string UsrVtrrchCodboc { get; set; }
         public string UsrVtrrchCodter { get; set; }
         public Int16 UsrVtrrchCodent { get; set; }
+        public string UsrVtrrchUtpaor { get; set; }
     }
 }
