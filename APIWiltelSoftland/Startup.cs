@@ -44,6 +44,7 @@ namespace APIWiltelSoftland
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddSwaggerGen(config =>
             {
                 config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "APIWiltel", Version = "v1" });
@@ -151,6 +152,8 @@ namespace APIWiltelSoftland
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //app.UseSoapEndpoint(path: "/PingService.svc", binding: new BasicHttpBinding());
+
             app.UseSwagger();
 
             app.UseSwaggerUI(config =>

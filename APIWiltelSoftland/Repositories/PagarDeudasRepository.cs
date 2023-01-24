@@ -132,14 +132,14 @@ namespace APIWiltelSoftland.Repositories
         {
             RespPagarDeudas resultado = new RespPagarDeudas();
 
-            //await InsertaCwJmSchedules("WSCOBR");
+            await InsertaCwJmSchedules("WSCOBR");
 
             //Para dejar tiempo a Softland a que procese el recibo
             //Se comenta el 13/11/2020 a pedido de Diego Ballario (Mail 28/10/2020)
             //Thread.Sleep(15000);
 
             //Para recargar la entidad con los datos del recibo impactado en Softland.
-            await Context.Entry(HeaderCobranza).ReloadAsync();
+            //await Context.Entry(HeaderCobranza).ReloadAsync();
 
             switch (HeaderCobranza.SarVtrrchStatus)
             {
