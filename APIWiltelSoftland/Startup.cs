@@ -85,6 +85,10 @@ namespace APIWiltelSoftland
             services.AddDbContext<WILTELContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
+            services.AddDbContext<WILTELPagosContext>(options =>
+               options.UseSqlServer(Configuration.GetConnectionString("PagosConnectionString")));
+
+
             services.AddMvc()
                 .AddXmlDataContractSerializerFormatters();
             services.AddMvc(Options =>

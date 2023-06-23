@@ -13,16 +13,20 @@ namespace APIWiltelSoftland.Repositories
 {
     public class PagarDeudasRepository: Repository
     { 
-        public PagarDeudasRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger Logger):base(context, configuration, Logger)
+        public PagarDeudasRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger Logger, WILTELPagosContext contextPagos)
+            :base(context, configuration, Logger)
         {
+            ContextPagos = contextPagos;
         }
 
+        public WILTELPagosContext ContextPagos { get; }
 
         public async Task<bool> ExisteTransaccion(string IdTransaccion)
         {
             SarVtrrch vtrrch = await Context.SarVtrrch.FindAsync(IdTransaccion);
+            SarVtrrch vtrrchPagos = await ContextPagos.SarVtrrch.FindAsync(IdTransaccion);
 
-            if (vtrrch != null)
+            if (vtrrch != null || vtrrchPagos != null)
             {
                 return true;
             }
@@ -99,17 +103,17 @@ namespace APIWiltelSoftland.Repositories
 
             try
             {
-                Context.SarVtrrch.Add(HeaderCobranza);
+                ContextPagos.SarVtrrch.Add(HeaderCobranza);
 
-                await Context.SaveChangesAsync();
+                await ContextPagos.SaveChangesAsync();
 
-                Context.SarVtrrcc01.Add(AplicacionesCobranza);
+                ContextPagos.SarVtrrcc01.Add(AplicacionesCobranza);
 
-                await Context.SaveChangesAsync();
+                await ContextPagos.SaveChangesAsync();
 
-                Context.SarVtrrcc04.Add(MediosdeCobro);
+                ContextPagos.SarVtrrcc04.Add(MediosdeCobro);
 
-                await Context.SaveChangesAsync();
+                await ContextPagos.SaveChangesAsync();
 
               //  Logger.Information("Se insertaron registros en tablas SAR_VTRRCH e hijas");
             }
