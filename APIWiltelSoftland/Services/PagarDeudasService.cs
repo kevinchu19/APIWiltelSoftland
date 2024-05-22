@@ -76,7 +76,7 @@ namespace APIWiltelSoftland.Services
                 return response;
             }
 
-            if (response.Estado != 999)
+            if (response.Estado == 0)
             {
 
                 response = await Repository.Post(CodBoca, CodTerminal,

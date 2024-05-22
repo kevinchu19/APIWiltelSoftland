@@ -105,11 +105,11 @@ namespace APIWiltelSoftland.Repositories
             {
                 ContextPagos.SarVtrrch.Add(HeaderCobranza);
 
-                await ContextPagos.SaveChangesAsync();
+                //await ContextPagos.SaveChangesAsync();
 
                 ContextPagos.SarVtrrcc01.Add(AplicacionesCobranza);
 
-                await ContextPagos.SaveChangesAsync();
+                //await ContextPagos.SaveChangesAsync();
 
                 ContextPagos.SarVtrrcc04.Add(MediosdeCobro);
 
@@ -121,13 +121,12 @@ namespace APIWiltelSoftland.Repositories
             {
                 Logger.Fatal($"Error al insertar registros en tablas SAR_VTRRCH e hijas:{error}");
                 response.Estado = 999;
-                response.NroOperacion = "";
+                response.NroOperacion = "Error al procesar el registro de cobro";
+                return response;
             };
-
-            if (status == 0)
-            {
-                response = await ProcesoRecibo(HeaderCobranza);
-            }
+            
+            response = await ProcesoRecibo(HeaderCobranza);
+            
             return response;
           
         }
