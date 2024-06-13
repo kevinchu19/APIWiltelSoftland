@@ -105,7 +105,7 @@ namespace APIWiltelSoftland.Repositories
             {
                 ContextPagos.SarVtrrch.Add(HeaderCobranza);
 
-                //await ContextPagos.SaveChangesAsync();
+                ContextPagos.SaveChanges();
 
                 ContextPagos.SarVtrrcc01.Add(AplicacionesCobranza);
 
