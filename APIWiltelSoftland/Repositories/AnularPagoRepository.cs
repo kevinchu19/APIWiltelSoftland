@@ -13,9 +13,12 @@ namespace APIWiltelSoftland.Repositories
 {
     public class AnularPagoRepository: Repository
     {
-        public AnularPagoRepository (WILTELContext context, IConfiguration configuration, Serilog.ILogger logger) : base(context, configuration, logger)
+        public AnularPagoRepository (WILTELContext context, IConfiguration configuration, Serilog.ILogger logger, WILTELPagosContext contextPagos) : base(context, configuration, logger)
         {
+            ContextPagos = contextPagos;
         }
+
+        public WILTELPagosContext ContextPagos { get; }
 
         public async Task<RespAnular> Post(string codBoca, string codTerminal, string idTransaccion, string codfor, int nrofor)
         {
@@ -49,8 +52,8 @@ namespace APIWiltelSoftland.Repositories
 
             try
             {
-                Context.SarVtrrch.Add(HeaderCobranza);
-                await Context.SaveChangesAsync();
+                ContextPagos.SarVtrrch.Add(HeaderCobranza);
+                await ContextPagos.SaveChangesAsync();
                 //Logger.Information("Se insertó registro de anulación en tabla SAR_VTRRCH ");
             }
             catch (Exception error)
@@ -118,10 +121,10 @@ namespace APIWiltelSoftland.Repositories
             await InsertaCwJmSchedules("WSCOBR");
 
             //Para dejar tiempo a Softland a que procese el recibo
-            Thread.Sleep(10000);
+            //Thread.Sleep(10000);
 
             //Para recargar la entidad con los datos del recibo impactado en Softland.
-            await Context.Entry(HeaderCobranza).ReloadAsync();
+            //await Context.Entry(HeaderCobranza).ReloadAsync();
 
             switch (HeaderCobranza.SarVtrrchStatus)
             {
@@ -131,7 +134,7 @@ namespace APIWiltelSoftland.Repositories
                     break;
                 case "W":
                     Logger.Warning($"La anulación se recibio, pero Softland aún no la proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
-                    respuesta.Estado = 999;
+                    respuesta.Estado = 0;
                     break;
                 case "E":
                     Logger.Warning($"La anulación se recibio, el procesamiento dio error: {HeaderCobranza.SarVtrrchErrmsg}");
