@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using APIWiltelSoftland.Contexts;
 using APIWiltelSoftland.Entities;
 using APIWiltelSoftland.Models;
+using System.Collections.Generic;
 
 namespace APIWiltelSoftland.Repositories
 {
@@ -38,7 +39,8 @@ namespace APIWiltelSoftland.Repositories
 
         
         public async Task<RespPagarDeudas> Post(string codBoca, string codTerminal, ComprobanteDeudaSoftland comprobanteDeuda,
-                                                                   string codEnte, string idTransaccion, string importe, int status)
+                                                                   string codEnte, string idTransaccion, string importe, int status, decimal saldoComprobante,
+                                                                   string comprobantePagoDuplicado)
         {
             RespPagarDeudas response = new RespPagarDeudas();
 
@@ -64,26 +66,65 @@ namespace APIWiltelSoftland.Repositories
                 UsrVtrrchUtpaor = "S"
             };
 
+            List<SarVtrrcc01> AplicacionesCobranza = new List<SarVtrrcc01>();
+            int nroitm = 0;
 
-            SarVtrrcc01 AplicacionesCobranza = new SarVtrrcc01
+            if (Convert.ToDecimal(importe) > saldoComprobante) // kt 22/1/2025 - ID 275 Preveo linea de pago duplicado por el excedente entre lo pagado y el saldo
             {
-                SarVtrrcc01Identi = idTransaccion,
-                SarVtrrcc01Nroitm = 1,
-                SarVtrrcc01Modapl = comprobanteDeuda.Modfor,
-                SarVtrrcc01Codapl = comprobanteDeuda.Codfor,
-                SarVtrrcc01Nroapl = comprobanteDeuda.Nrofor,
-                SarVtrrcc01Cuotas = 1,
-                SarVtrrcc01Impnac = null,
-                SarVtrrcc01Impext = null,
-                SarVtrrcc01Cannac = Convert.ToDecimal(importe),
-                SarVtrrcc01Canext = null,
-                SarVtOalias = "SAR_VTRRCC",
-                SarVtFecalt = DateTime.Now,
-                SarVtFecmod = DateTime.Now,
-                SarVtUserid = "WEBAPI",
-                SarVtUltopr = "A",
-                SarVtDebaja = "N"
-            };
+                nroitm += 1;
+
+                AplicacionesCobranza.Add(
+                new SarVtrrcc01
+                {
+                    SarVtrrcc01Identi = idTransaccion,
+                    SarVtrrcc01Nroitm = nroitm,
+                    SarVtrrcc01Modapl = "VT",
+                    SarVtrrcc01Codapl = comprobantePagoDuplicado,
+                    SarVtrrcc01Nroapl = null,
+                    SarVtrrcc01Cuotas = 1,
+                    SarVtrrcc01Impnac = Convert.ToDecimal(importe) - saldoComprobante,
+                    SarVtrrcc01Impext = null,
+                    SarVtrrcc01Cannac = null,
+                    SarVtrrcc01Canext = null,
+                    SarVtOalias = "SAR_VTRRCC",
+                    SarVtFecalt = DateTime.Now,
+                    SarVtFecmod = DateTime.Now,
+                    SarVtUserid = "WEBAPI",
+                    SarVtUltopr = "A",
+                    SarVtDebaja = "N"
+                });
+
+            }
+
+            if (saldoComprobante > 0) // kt 22/1/2025 - ID 275 si el comporbante tenia saldo, recalculo cannac restarle al importe pagado la diferencia con lo aplicado en un PD.
+            {
+                nroitm += 1;
+
+                AplicacionesCobranza.Add(
+                  new SarVtrrcc01
+                  {
+                      SarVtrrcc01Identi = idTransaccion,
+                      SarVtrrcc01Nroitm = nroitm,
+                      SarVtrrcc01Modapl = comprobanteDeuda.Modfor,
+                      SarVtrrcc01Codapl = comprobanteDeuda.Codfor,
+                      SarVtrrcc01Nroapl = comprobanteDeuda.Nrofor,
+                      SarVtrrcc01Cuotas = 1,
+                      SarVtrrcc01Impnac = null,
+                      SarVtrrcc01Impext = null,
+                      SarVtrrcc01Cannac = Convert.ToDecimal(importe) - (Convert.ToDecimal(importe) - saldoComprobante),
+                      SarVtrrcc01Canext = null,
+                      SarVtOalias = "SAR_VTRRCC",
+                      SarVtFecalt = DateTime.Now,
+                      SarVtFecmod = DateTime.Now,
+                      SarVtUserid = "WEBAPI",
+                      SarVtUltopr = "A",
+                      SarVtDebaja = "N"
+                  });
+
+            }
+
+
+
 
             SarVtrrcc04 MediosdeCobro = new SarVtrrcc04
             {
@@ -107,7 +148,7 @@ namespace APIWiltelSoftland.Repositories
 
                 ContextPagos.SaveChanges();
 
-                ContextPagos.SarVtrrcc01.Add(AplicacionesCobranza);
+                ContextPagos.SarVtrrcc01.AddRange(AplicacionesCobranza);
 
                 //await ContextPagos.SaveChangesAsync();
 
@@ -166,5 +207,6 @@ namespace APIWiltelSoftland.Repositories
             return resultado;
         }
 
+        
     }
 }

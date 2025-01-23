@@ -30,6 +30,8 @@ namespace APIWiltelSoftland.Services
 
             bool existe = await Repository.ExisteTransaccion(IdTransaccion);
 
+            string comprobantePagoDuplicado = await Repository.RecuperarEquivalencia("WEBSER", "PAGDUP", CodEnte);
+
             if (existe == true)
             {
                 response.Estado = 999; //Error interno... la transaccion ya existe
@@ -58,7 +60,8 @@ namespace APIWiltelSoftland.Services
             //    return response;
             //}
 
-            if (comprobanteDeuda.Saldo == 0)
+
+            if (comprobanteDeuda.Saldo == 0 && comprobantePagoDuplicado=="")  //KT 22/1/2025 ID 275: No se valida mas si la entidad acepta pago duplicado
             {
                 response.Estado = 7; // La deuda ya fue cancelada
                 response.NroOperacion = "";
@@ -66,7 +69,7 @@ namespace APIWiltelSoftland.Services
                 return response;
             }
 
-            if (comprobanteDeuda.Saldo < Convert.ToDecimal(Importe))
+            if (comprobanteDeuda.Saldo < Convert.ToDecimal(Importe) && comprobantePagoDuplicado == "")  //KT 22/1/2025 ID 275: No se valida mas si la entidad acepta pago duplicado
             {
                 response.Estado = 10; //El importe no puede ser superior al monto adeudado del comprobante
                 response.NroOperacion = "";
@@ -81,7 +84,7 @@ namespace APIWiltelSoftland.Services
 
                 response = await Repository.Post(CodBoca, CodTerminal,
                                                 comprobanteDeuda, CodEnte,
-                                                IdTransaccion, Importe, response.Estado);
+                                                IdTransaccion, Importe, response.Estado, comprobanteDeuda.Saldo, comprobantePagoDuplicado);
 
 
             }

@@ -132,7 +132,7 @@ namespace APIWiltelSoftland.Repositories
                     Logger.Information($"La anulación se recibio, procesada ok por Softland");
                     respuesta.Estado = 0;
                     break;
-                case "W":
+                case "A":
                     Logger.Warning($"La anulación se recibio, pero Softland aún no la proceso, SAR_VTRRRCH_IDENTI = {HeaderCobranza.SarVtrrchIdenti}");
                     respuesta.Estado = 0;
                     break;

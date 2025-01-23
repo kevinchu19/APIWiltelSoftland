@@ -39,7 +39,7 @@ namespace APIWiltelSoftland.Repositories
             }
         }
 
-        protected async Task<string> RecuperarEquivalencia(string codigo, string codi01, string codi02)
+        public async Task<string> RecuperarEquivalencia(string codigo, string codi01, string codi02)
         {
             string sSql = "SELECT " +
                 " INTEQE_CODEQU " +
