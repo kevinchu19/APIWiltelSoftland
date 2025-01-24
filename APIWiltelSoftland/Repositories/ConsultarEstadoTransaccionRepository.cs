@@ -9,9 +9,13 @@ namespace APIWiltelSoftland.Repositories
     public class ConsultarEstadoTransaccionRepository: Repository
     {
 
-        public ConsultarEstadoTransaccionRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger logger): base(context, configuration, logger)
+        public ConsultarEstadoTransaccionRepository(WILTELContext context, IConfiguration configuration, Serilog.ILogger logger, WILTELPagosContext contextPagos) : 
+            base(context, configuration, logger)
         {
+            ContextPagos = contextPagos;
         }
+
+        public WILTELPagosContext ContextPagos { get; }
 
         public async Task<RespEstadoTransaccion> Get(string codBoca, string codTerminal, string idTransaccion)
         {
@@ -21,7 +25,7 @@ namespace APIWiltelSoftland.Repositories
                 NroOperacion = ""
             };
 
-            SarVtrrch vtrrch = await Context.SarVtrrch.FindAsync(idTransaccion);
+            SarVtrrch vtrrch = await ContextPagos.SarVtrrch.FindAsync(idTransaccion);
 
             if (vtrrch != null)
             {

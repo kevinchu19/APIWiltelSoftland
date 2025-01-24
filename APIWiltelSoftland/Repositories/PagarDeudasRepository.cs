@@ -207,6 +207,53 @@ namespace APIWiltelSoftland.Repositories
             return resultado;
         }
 
-        
+        public async Task<bool> ValidarPagoAnulado(string idtransaccion)
+        {
+            string sSql = "SELECT " +
+                " (CASE WHEN VTRMVH_CODREV IS NULL THEN 'N' ELSE 'S' END) ANULADO " +
+                " FROM VTRMVH " +
+                " INNER JOIN SAR_VTRRCH ON " +
+                " SAR_VTRRCH_CODEMP = VTRMVH_CODEMP AND " +
+                " SAR_VTRRCH_MODFOR = VTRMVH_MODFOR AND " +
+                " SAR_VTRRCH_CODFOR = VTRMVH_CODFOR AND " +
+                " SAR_VTRRCH_NROFOR = VTRMVH_NROFOR " +
+                " WHERE " +
+                $" SAR_VTRRCH_IDENTI = '{idtransaccion}' ";
+
+            string anulado = "";
+
+            using (SqlConnection sql = new SqlConnection(Connectionstring))
+            {
+                using (SqlCommand cmd = new SqlCommand(sSql, sql))
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+
+                    await sql.OpenAsync();
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            anulado = (string)reader["ANULADO"];
+                        }
+                    }
+                }
+
+                if (anulado == "")
+                {
+                    Logger.Warning($"No se generó pago correspondiente al id {idtransaccion}");
+                    return true;
+                }
+                if (anulado == "N")
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+
+
     }
 }
