@@ -34,4 +34,3 @@ C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Release\netc
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Release\netcoreapp2.1\APIWiltelSoftland.pdb
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Release\netcoreapp2.1\APIWiltelSoftland.genruntimeconfig.cache
 C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Release\netcoreapp2.1\APIWiltelSoftland.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\ktchu\source\repos\APIWiltelSoftland\APIWiltelSoftland\obj\Release\netcoreapp2.1\APIWiltelSoftland.csproj.AssemblyReference.cache
